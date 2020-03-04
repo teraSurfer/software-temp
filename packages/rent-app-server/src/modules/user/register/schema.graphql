@@ -1,0 +1,9 @@
+type Mutation {
+    register(
+        email: String!,
+        firstName: String!,
+        lastName: String!,
+        password: String!,
+        roleId: [Int!]!,
+    ): [Response!]
+}

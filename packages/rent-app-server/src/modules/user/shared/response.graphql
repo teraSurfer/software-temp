@@ -1,0 +1,10 @@
+type Error {
+    message: String!,
+    path: String!
+}
+
+type Success {
+    message: String!
+}
+
+union Response = Error | Success

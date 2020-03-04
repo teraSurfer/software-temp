@@ -1,0 +1,5 @@
+union UserResponse = User | Error
+
+type Query {
+    users: [UserResponse!]
+}

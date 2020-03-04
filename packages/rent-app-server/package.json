@@ -1,0 +1,47 @@
+{
+  "name": "@rent_app/rent-app-server",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@gql2ts/types": "^1.9.0",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/connect-redis": "^0.0.13",
+    "@types/dotenv-safe": "^8.1.0",
+    "@types/glob": "^7.1.1",
+    "@types/ioredis": "^4.14.8",
+    "@types/node": "^13.7.7",
+    "@types/yup": "^0.26.32",
+    "cross-env": "^7.0.0",
+    "nodemon": "^2.0.2",
+    "rimraf": "^3.0.2",
+    "ts-node": "^8.6.2",
+    "tslint": "^6.0.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@gql2ts/from-schema": "^1.10.1",
+    "bcryptjs": "^2.4.3",
+    "connect-redis": "^4.0.4",
+    "dotenv": "^8.2.0",
+    "dotenv-safe": "^8.2.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "glob": "^7.1.6",
+    "graphql": "^14.6.0",
+    "graphql-middleware": "^4.0.2",
+    "graphql-tools": "^4.0.7",
+    "graphql-yoga": "^1.18.3",
+    "ioredis": "^4.16.0",
+    "merge-graphql-schemas": "^1.7.6",
+    "pg": "^7.18.2",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.2.24",
+    "yup": "^0.28.1"
+  },
+  "scripts": {
+    "start": "cross-env NODE_ENV=development nodemon --exec ts-node --files src/main.ts",
+    "prep": "ts-node --files src/scripts/createTypes.ts"
+  }
+}
