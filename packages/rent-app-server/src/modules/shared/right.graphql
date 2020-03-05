@@ -1,0 +1,5 @@
+type Right {
+    id: Int!,
+    rightName: String!,
+    rightDescription: String!
+}

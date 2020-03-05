@@ -6,7 +6,7 @@
     "username": "postgres",
     "password": "admin",
     "database": "rent_db",
-    "synchronize": true,
+    "synchronize": false,
     "logging": true,
     "entities": ["src/entities/**/*.ts"],
     "migrations": ["src/migration/**/*.ts"],

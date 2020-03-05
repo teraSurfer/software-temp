@@ -1,6 +1,7 @@
 type Mutation {
     createRole(
         roleName: String!,
-        roleDescription: String!
+        roleDescription: String!,
+        rightIds: [Int!]!
     ): [Response!]
 }

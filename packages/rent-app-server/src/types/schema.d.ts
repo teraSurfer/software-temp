@@ -22,6 +22,7 @@ column: number;
 
 interface IQuery {
 __typename: "Query";
+rights: Array<RightsResponse> | null;
 roles: Array<RoleResponse> | null;
 role: RoleResponse;
 users: Array<UserResponse> | null;
@@ -30,6 +31,23 @@ users: Array<UserResponse> | null;
 interface IRoleOnQueryArguments {
 id?: number | null;
 name?: string | null;
+}
+
+type RightsResponse = IRight | IError;
+
+
+
+interface IRight {
+__typename: "Right";
+id: number;
+rightName: string;
+rightDescription: string;
+}
+
+interface IError {
+__typename: "Error";
+message: string;
+path: string;
 }
 
 type RoleResponse = IRole | IError;
@@ -41,12 +59,7 @@ __typename: "Role";
 id: number;
 roleName: string;
 roleDescription: string;
-}
-
-interface IError {
-__typename: "Error";
-message: string;
-path: string;
+rights: Array<IRight> | null;
 }
 
 type UserResponse = IUser | IError;
@@ -59,17 +72,25 @@ id: string;
 email: string;
 firstName: string;
 lastName: string;
+roles: Array<IRole> | null;
 }
 
 interface IMutation {
 __typename: "Mutation";
+createRight: Array<Response> | null;
 createRole: Array<Response> | null;
 register: Array<Response> | null;
+}
+
+interface ICreateRightOnMutationArguments {
+rightName: string;
+rightDescription: string;
 }
 
 interface ICreateRoleOnMutationArguments {
 roleName: string;
 roleDescription: string;
+rightIds: Array<number>;
 }
 
 interface IRegisterOnMutationArguments {
