@@ -4,6 +4,5 @@ type Mutation {
         firstName: String!,
         lastName: String!,
         password: String!,
-        roleId: [Int!]!,
     ): [Response!]
 }

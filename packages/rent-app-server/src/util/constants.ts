@@ -18,7 +18,7 @@ export const DB = {
 }
 
 export const SESSION = {
-    SECRET: process.env.SESSION_SECRET
+    SECRET: process.env.SESSION_SECRET || 'NotSoSecret'
 }
 
 export const FRONTEND = {

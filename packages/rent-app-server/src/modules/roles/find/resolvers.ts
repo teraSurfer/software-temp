@@ -29,5 +29,11 @@ export const resolvers: ResolverMap = {
                 }
             }
         }
+    },
+    RoleResponse: {
+        __resolveType: obj => {
+            if(obj.path) return 'Error';
+            else return 'Role';
+          }
     }
 }

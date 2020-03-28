@@ -1,6 +1,6 @@
 union RoleResponse = Role | Error
 
 type Query {
-    roles: [RoleResponse!],
+    roles: [RoleResponse!]!,
     role(id: Int, name: String): RoleResponse!
 }

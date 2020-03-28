@@ -22,15 +22,20 @@ column: number;
 
 interface IQuery {
 __typename: "Query";
-rights: Array<RightsResponse> | null;
-roles: Array<RoleResponse> | null;
+rights: Array<RightsResponse>;
+roles: Array<RoleResponse>;
 role: RoleResponse;
-users: Array<UserResponse> | null;
+users: Array<UserResponse>;
+user: UserResponse;
 }
 
 interface IRoleOnQueryArguments {
 id?: number | null;
 name?: string | null;
+}
+
+interface IUserOnQueryArguments {
+id?: string | null;
 }
 
 type RightsResponse = IRight | IError;
@@ -79,6 +84,7 @@ interface IMutation {
 __typename: "Mutation";
 createRight: Array<Response> | null;
 createRole: Array<Response> | null;
+login: LoginResponse;
 register: Array<Response> | null;
 }
 
@@ -93,12 +99,16 @@ roleDescription: string;
 rightIds: Array<number>;
 }
 
+interface ILoginOnMutationArguments {
+email: string;
+password: string;
+}
+
 interface IRegisterOnMutationArguments {
 email: string;
 firstName: string;
 lastName: string;
 password: string;
-roleId: Array<number>;
 }
 
 type Response = IError | ISuccess;
@@ -108,6 +118,15 @@ type Response = IError | ISuccess;
 interface ISuccess {
 __typename: "Success";
 message: string;
+}
+
+type LoginResponse = IUserSession | IError;
+
+
+
+interface IUserSession {
+__typename: "UserSession";
+sessionId: string;
 }
 }
 

@@ -1,0 +1,9 @@
+type UserSession {
+    sessionId: String!
+}
+
+union LoginResponse = UserSession | Error
+
+type Mutation {
+    login(email: String!, password: String!): LoginResponse!
+}
