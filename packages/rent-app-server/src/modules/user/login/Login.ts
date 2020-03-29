@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcryptjs';
 import { Resolver, Mutation, Arg, Ctx } from 'type-graphql';
-import { UserResponseUnion, ResponseError } from '../Responses';
+import { UserResponseUnion, ResponseError } from '../../shared';
 import { LoginInput } from './LoginInput';
 import { User } from '../../../entities/user';
 import { AppContext } from '../../../types/context';

@@ -1,5 +1,5 @@
 import { Resolver, Query, Ctx, Authorized, Arg } from 'type-graphql';
-import { UserResponseUnion, ResponseError } from '../Responses';
+import { UserResponseUnion, ResponseError } from '../../shared';
 import { AppContext } from '../../../types/context';
 import { User } from '../../../entities/user';
 
@@ -22,11 +22,6 @@ export class UserResolver {
         const currentUser = await User.findOne({ id: ctx.req.session!.userId }, {
             relations: ['roles', 'billing']
         });
-
-        if (!currentUser) return new ResponseError(
-            'You\'re not logged in.',
-            'me'
-        )
 
         return currentUser;
     }

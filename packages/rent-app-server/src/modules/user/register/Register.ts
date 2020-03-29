@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Arg, Query, Authorized } from 'type-graphql';
 import { User } from '../../../entities/user';
 import { RegisterInput } from './RegisterInput';
-import { UserResponseUnion, ResponseError } from '../Responses';
+import { UserResponseUnion, ResponseError } from '../../shared';
 import { Role } from '../../../entities/roles';
 import { Billing } from '../../../entities/billing';
 
