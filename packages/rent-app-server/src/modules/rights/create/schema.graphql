@@ -1,6 +1,0 @@
-type Mutation {
-    createRight(
-        rightName: String!,
-        rightDescription: String!
-    ): [Response!]
-}

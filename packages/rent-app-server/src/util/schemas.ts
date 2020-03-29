@@ -1,25 +1,20 @@
-  
-import { mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
-import * as path from 'path';
-import * as fs from 'fs';
-import { makeExecutableSchema } from 'graphql-tools';
-import * as glob from 'glob';
+import { buildSchema } from 'type-graphql';
+import { RegisterResolver } from '../modules/user/register/Register';
+import { LoginResolver } from '../modules/user/login/Login';
+import { LogoutResolver } from '../modules/user/logout/Logout';
+import { authCheck } from '../middleware/auth';
+import { UserResolver } from '../modules/user/find/Find';
+import { CreateUserResolver } from '../modules/user/create/Create';
 
-export const generateSchema = () => {
-  const pathToModules = path.join(__dirname, '../modules');
-  const graphqlTypes = glob
-    .sync(`${pathToModules}/**/*.graphql`)
-    .map(x => fs.readFileSync(x, { encoding: 'utf8' }));
 
-  const resolvers = glob
-    .sync(`${pathToModules}/**/resolvers.?s`)
-    .map(resolver => require(resolver).resolvers);
-
-  return makeExecutableSchema({
-    typeDefs: mergeTypes(graphqlTypes),
-    resolvers: mergeResolvers(resolvers),
-    resolverValidationOptions: {
-        requireResolversForResolveType: false 
-    }
-  });
-};
+export const generateSchemas = () => 
+  buildSchema({
+    resolvers: [
+      RegisterResolver,
+      LoginResolver,
+      LogoutResolver,
+      UserResolver,
+      CreateUserResolver
+    ],
+    authChecker: authCheck
+  })

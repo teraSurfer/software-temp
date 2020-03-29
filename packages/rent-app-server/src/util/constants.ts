@@ -10,7 +10,8 @@ export const SERVER = {
     STOPPED: "SERVER_STOPPED",
     STARTING: "SERVER_STARTING",
     STOPPING: "SERVER_STOPPING",
-    PORT: process.env.PORT
+    PORT: process.env.PORT || '3030',
+    HOST: process.env.HOST || 'localhost'
 };
 
 export const DB = {

@@ -1,5 +1,0 @@
-union RightsResponse = Right | Error
-
-type Query {
-    rights: [RightsResponse!]!
-}

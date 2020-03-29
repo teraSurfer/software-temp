@@ -1,14 +1,18 @@
+import 'reflect-metadata';
 import * as constants from './util/constants';
 
 import { EventEmitter } from 'events';
-import { GraphQLServer } from 'graphql-yoga';
 // import { applyMiddleware } from 'graphql-middleware';
-import { generateSchema } from './util/schemas';
-import { Props } from 'graphql-yoga/dist/types';
 import { createDBConnection } from './util/type-orm';
 import * as session from 'express-session';
 import { redis } from './util/redis';
 import * as connectRedis from 'connect-redis';
+import { ApolloServer } from 'apollo-server-express';
+import { GraphQLSchema } from 'graphql';
+import * as Express from 'express';
+import * as cors from 'cors';
+import { generateSchemas } from './util/schemas';
+import { AppContext } from './types/context';
 
 /*
  * File Created: Sunday, 1st March 2020
@@ -18,64 +22,62 @@ import * as connectRedis from 'connect-redis';
  */
 
 export class Server extends EventEmitter {
-    private server: GraphQLServer;
-    private props: Props;
+    private apolloServer: ApolloServer;
+    private expressServer: Express.Application;
+    private schema: GraphQLSchema;
     constructor() {
         super();
     }
 
     async loadSettings() {
         this.emit(constants.SERVER.STARTING);
-        const schema = generateSchema()
-        // applyMiddleware(schema, middleware);
-
-        this.props = {
-            schema,
-            context: ({request, response}) => ({
-                redis,
-                url: request 
-                    ? request.protocol + '://' + request.get('host')
-                    : '',
-                session: request ? request.session : undefined,
-                req: request,
-                res: response,
-            })
-        };
-
-        await createDBConnection();
-    }
-
-    start() {
-        this.server = new GraphQLServer(this.props);
+        this.expressServer = Express();
+        try {
+            this.schema = await generateSchemas();
+        } catch (err) { console.log(err) }
+        this.apolloServer = new ApolloServer({
+            schema: this.schema,
+            context: ({ req, res }: AppContext) => ({
+                req,
+                res,
+            }),
+        });
         const RedisStore = connectRedis(session as any);
-        this.server.express.use(
+        await createDBConnection();
+
+        this.expressServer.use(
+            cors({
+                credentials: true,
+                origin: constants.FRONTEND.URL
+            })
+        );
+
+        this.expressServer.use(
             session({
                 store: new RedisStore({
                     client: redis as any,
                     prefix: ''
                 }),
-                name: 'ssid',
+                name: "sid",
                 secret: constants.SESSION.SECRET,
                 resave: false,
                 saveUninitialized: false,
                 cookie: {
                     httpOnly: true,
-                    secure: false,
-                    maxAge: 1000 * 60 * 60 * 24 * 7
+                    secure: process.env.NODE_ENV === "production",
+                    maxAge: 1000 * 60 * 60 * 24 * 7 * 365 // 7 years
                 }
-            } as any)
+            })
         );
-        this.server.start({
-            port: constants.SERVER.PORT,
-            endpoint: '/graph/v1',
-            subscriptions: '/subscriptions',
-            playground: '/playground',
-            cors: {
-                credentials: true,
-                origin: constants.FRONTEND.URL 
-            }
-        }, ({port}) => 
-        console.log(`Server is running on localhost:${port}`));
+
+        this.apolloServer.applyMiddleware({ app: this.expressServer, cors: false });
+    }
+
+    start() {
+        // tslint:disable-next-line: radix
+        this.expressServer.listen(parseInt(constants.SERVER.PORT), constants.SERVER.HOST, () => {
+            console.log(`Application started on http://${constants.SERVER.HOST}:${constants.SERVER.PORT}`);
+        })
     }
 }
 
