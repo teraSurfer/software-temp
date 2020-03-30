@@ -22,4 +22,4 @@ export const authCheck: AuthChecker<AppContext> = async (
         console.log(authorized);
         return (authorized !== 0);
     }
-}
+};

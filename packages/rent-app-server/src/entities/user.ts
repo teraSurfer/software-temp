@@ -1,11 +1,12 @@
 import * as bcrypt from 'bcryptjs';
 
 import {
-    Entity, BaseEntity, PrimaryGeneratedColumn, Column, BeforeInsert, ManyToMany, JoinTable, OneToOne, JoinColumn
+    Entity, BaseEntity, PrimaryGeneratedColumn, Column, BeforeInsert, ManyToMany, JoinTable, OneToOne, JoinColumn, OneToMany
 } from 'typeorm';
 import { Role } from './roles';
 import { ObjectType, Field, ID } from 'type-graphql';
 import { Billing } from './billing';
+import { Reservation } from './reservation';
 
 /*
  * File Created: Sunday, 1st March 2020
@@ -47,16 +48,9 @@ export class User extends BaseEntity {
     @JoinColumn()
     billing?: Billing;
 
-    constructor(email: string, fn: string, ln: string, id?: string, roles?: Role[]) {
-        super();
-        if(id)
-            this.id = id;
-        this.email = email;
-        this.firstName = fn;
-        this.lastName = ln;
-        if(roles) 
-            this.roles = roles;
-    }
+    @Field(() => Reservation, {nullable: true})
+    @OneToMany(() => Reservation, r => r.user)
+    reservations: Reservation[];
 
     @BeforeInsert()
     async hashPassword() {

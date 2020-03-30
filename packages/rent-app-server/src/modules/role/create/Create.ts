@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Arg, Authorized } from 'type-graphql';
 import { RoleResponseUnion, ResponseError } from '../../shared';
-import { CreateInput } from './CreateInput';
-import { Role } from 'rent-app-server/src/entities/roles';
+import { CreateRoleInput } from './CreateInput';
+import { Role } from '../../../entities/roles';
 
 /*
  * File Created: Sunday, 29th March 2020
@@ -16,7 +16,7 @@ export class CreateRoleResolver {
     @Authorized(['admin'])
     @Mutation(() => RoleResponseUnion)
     async createRole(
-        @Arg('input') input: CreateInput
+        @Arg('input') input: CreateRoleInput
     ) {
         try {
             const {roleName, roleDescription} = input;
@@ -29,7 +29,7 @@ export class CreateRoleResolver {
                 return new ResponseError(
                     'A role with that name is already present.',
                     'createRole'
-                )
+                );
             }
 
             const role = await Role.create({
@@ -43,7 +43,7 @@ export class CreateRoleResolver {
             return new ResponseError(
                 'Something went wrong, try again later.',
                 'createRole'
-            )
+            );
         }
     }
 

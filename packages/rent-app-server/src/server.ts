@@ -2,7 +2,6 @@ import 'reflect-metadata';
 import * as constants from './util/constants';
 
 import { EventEmitter } from 'events';
-// import { applyMiddleware } from 'graphql-middleware';
 import { createDBConnection } from './util/type-orm';
 import * as session from 'express-session';
 import { redis } from './util/redis';
@@ -34,7 +33,7 @@ export class Server extends EventEmitter {
         this.expressServer = Express();
         try {
             this.schema = await generateSchemas();
-        } catch (err) { console.log(err) }
+        } catch (err) { console.log(err); }
         this.apolloServer = new ApolloServer({
             schema: this.schema,
             context: ({ req, res }: AppContext) => ({
@@ -77,7 +76,7 @@ export class Server extends EventEmitter {
         // tslint:disable-next-line: radix
         this.expressServer.listen(parseInt(constants.SERVER.PORT), constants.SERVER.HOST, () => {
             console.log(`Application started on http://${constants.SERVER.HOST}:${constants.SERVER.PORT}`);
-        })
+        });
     }
 }
 

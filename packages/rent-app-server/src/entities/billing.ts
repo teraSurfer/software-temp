@@ -25,7 +25,7 @@ export class Billing extends BaseEntity {
     @Column('text', {name: 'address_first_line'})
     addressFirstLine: string;
 
-    @Field()
+    @Field({nullable: true})
     @Column('text', {name: 'address_second_line'})
     addressSecondLine: string;
 

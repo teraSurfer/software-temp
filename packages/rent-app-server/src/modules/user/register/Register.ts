@@ -19,7 +19,7 @@ export class RegisterResolver {
     @Authorized(['user', 'admin'])
     @Query(() => String)
     hello() {
-        return 'Hello world'
+        return 'Hello world';
     }
     
     @Mutation(() => UserResponseUnion)
@@ -61,7 +61,7 @@ export class RegisterResolver {
           return new ResponseError(
             'Something went wrong, try after sometime.',
             'register'
-          )
+          );
         }
 
         const exp = new Date(expiry);

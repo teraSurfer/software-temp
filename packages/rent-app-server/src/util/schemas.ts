@@ -27,4 +27,4 @@ export const generateSchemas = () =>
       CreateRoleResolver
     ],
     authChecker: authCheck
-  })
+  });

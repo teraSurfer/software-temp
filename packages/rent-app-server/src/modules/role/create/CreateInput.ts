@@ -9,13 +9,13 @@ import { IsNotEmpty, MaxLength } from 'class-validator';
  */
 
 @InputType()
-export class CreateInput {
+export class CreateRoleInput {
 
-    @Field()
+    @Field(() => String)
     @IsNotEmpty()
     roleName: string;
 
-    @Field()
+    @Field(() => String)
     @IsNotEmpty()
     @MaxLength(255)
     roleDescription: string;

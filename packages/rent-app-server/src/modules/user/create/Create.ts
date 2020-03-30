@@ -1,6 +1,6 @@
 import { Resolver, Authorized, Mutation, Arg } from 'type-graphql';
 import { UserResponseUnion, ResponseError } from '../../shared';
-import { CreateInput } from './CreateInput';
+import { CreateUserInput } from './CreateInput';
 import { User } from '../../../entities/user';
 import { Role } from '../../../entities/roles';
 
@@ -18,7 +18,7 @@ export class CreateUserResolver {
     @Authorized(['admin'])
     @Mutation(() => UserResponseUnion)
     async createUser(
-        @Arg('input') input: CreateInput
+        @Arg('input') input: CreateUserInput
     ) {
         try {
             const {email, firstName, lastName, password, roles} = input;
@@ -34,12 +34,12 @@ export class CreateUserResolver {
                 {
                     where: roles.map(val => ({roleName: val}))
                 }
-            )
+            );
 
             if(!userRoles) return new ResponseError (
                 'Sorry, that role doesn\'t exist',
                 'createUser'
-            )
+            );
 
             const user = await User.create({
                 email,
@@ -55,7 +55,7 @@ export class CreateUserResolver {
             return new ResponseError(
                 'Something went wrong, try again later.',
                 'createUser'
-            )
+            );
         }
     }
 }

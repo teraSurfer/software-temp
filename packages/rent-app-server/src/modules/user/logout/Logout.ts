@@ -1,5 +1,5 @@
 import { Resolver, Mutation, Ctx } from 'type-graphql';
-import { AppContext } from 'rent-app-server/src/types/context';
+import { AppContext } from '../../../types/context';
 
 /*
  * File Created: Saturday, 28th March 2020
@@ -23,7 +23,7 @@ export class LogoutResolver {
 
                     ctx.res.clearCookie('sid');
                     return res(true);
-                })
-            })
+                });
+            });
         }
 }

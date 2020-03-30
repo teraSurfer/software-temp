@@ -11,7 +11,7 @@ import { Length, IsEmail, IsNotEmpty } from 'class-validator';
 
 
 @InputType()
-export class CreateInput {
+export class CreateUserInput {
 
     @Field()
     @Length(1, 255)

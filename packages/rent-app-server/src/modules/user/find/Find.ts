@@ -38,7 +38,7 @@ export class UserResolver {
             return new ResponseError(
                 'Cannot query db, try again later.',
                 'findAllUsers'
-            )
+            );
         }
     }
 
@@ -60,13 +60,13 @@ export class UserResolver {
                 return new ResponseError(
                     'Need email or id.',
                     'findOneUser'
-                )
+                );
             }
         } catch (err) {
             return new ResponseError(
                 'Cannot query db, try again later.',
                 'findOneUser'
-            )
+            );
         }
     }
 
