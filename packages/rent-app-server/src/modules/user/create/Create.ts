@@ -25,7 +25,7 @@ export class CreateUserResolver {
 
             const userExists = await User.findOne({email});
 
-            if(userExists) return new ResponseError (
+            if(userExists) throw new ResponseError (
                 'User with that email already exists.',
                 'createUser'
             );
@@ -36,7 +36,7 @@ export class CreateUserResolver {
                 }
             );
 
-            if(!userRoles) return new ResponseError (
+            if(!userRoles) throw new ResponseError (
                 'Sorry, that role doesn\'t exist',
                 'createUser'
             );
@@ -52,7 +52,7 @@ export class CreateUserResolver {
             return user;
 
         } catch (err) {
-            return new ResponseError(
+            throw new ResponseError(
                 'Something went wrong, try again later.',
                 'createUser'
             );

@@ -64,4 +64,8 @@ export class RegisterInput {
     @Length(3, 3)
     cvv: string;
 
+    @Field()
+    @IsDateString()
+    membershipExpiry: string;
+
 }

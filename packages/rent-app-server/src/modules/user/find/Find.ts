@@ -20,7 +20,7 @@ export class UserResolver {
     @Query(() => UserResponseUnion)
     async me(@Ctx() ctx: AppContext) {
         const currentUser = await User.findOne({ id: ctx.req.session!.userId }, {
-            relations: ['roles', 'billing']
+            relations: ['roles']
         });
 
         return currentUser;
@@ -31,11 +31,11 @@ export class UserResolver {
     async findAllUsers() {
         try {
             const users = await User.find({
-                relations: ['roles', 'billing']
+                relations: ['roles']
             });
             return users;
         } catch (err) {
-            return new ResponseError(
+            throw new ResponseError(
                 'Cannot query db, try again later.',
                 'findAllUsers'
             );
@@ -48,22 +48,22 @@ export class UserResolver {
         try {
             if (id !== '') {
                 const user = await User.findOne({id}, {
-                    relations: ['roles', 'billing']
+                    relations: ['roles']
                 });
                 return user;
             } else if (email !== '') {
                 const user = await User.findOne({email}, {
-                    relations: ['roles', 'billing']
+                    relations: ['roles']
                 });
                 return user;
             } else {
-                return new ResponseError(
+                throw new ResponseError(
                     'Need email or id.',
                     'findOneUser'
                 );
             }
         } catch (err) {
-            return new ResponseError(
+            throw new ResponseError(
                 'Cannot query db, try again later.',
                 'findOneUser'
             );

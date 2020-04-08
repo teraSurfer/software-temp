@@ -3,7 +3,7 @@ import { User } from '../../../entities/user';
 import { RegisterInput } from './RegisterInput';
 import { UserResponseUnion, ResponseError } from '../../shared';
 import { Role } from '../../../entities/roles';
-import { Billing } from '../../../entities/billing';
+import { MembershipDetails } from '../../../entities/membershipDetails';
 
 
 /*
@@ -13,82 +13,83 @@ import { Billing } from '../../../entities/billing';
  * Copyright (c) 2020
  */
 
-
 @Resolver()
 export class RegisterResolver {
-    @Authorized(['user', 'admin'])
-    @Query(() => String)
-    hello() {
-        return 'Hello world';
+  @Authorized(['user', 'admin'])
+  @Query(() => String)
+  hello() {
+    return 'Hello world';
+  }
+
+  @Mutation(() => UserResponseUnion)
+  async register(@Arg('data') {
+    email,
+    firstName,
+    lastName,
+    password,
+    addressFirstLine,
+    addressSecondLine,
+    addressThirdLine,
+    addressZipCode,
+    creditCardNumber,
+    cvv,
+    expiry,
+    license,
+    nameOnCard,
+    membershipExpiry
+  }: RegisterInput): Promise<ResponseError | User> {
+
+    console.log(password);
+
+    const userExists = await User.findOne({ email });
+
+    if (userExists) {
+      throw new ResponseError(
+        'User with that email already exists',
+        'register'
+      );
     }
-    
-    @Mutation(() => UserResponseUnion)
-    async register(@Arg('data') {
-        email,
-        firstName,
-        lastName,
-        password,
-        addressFirstLine,
-        addressSecondLine,
-        addressThirdLine,
-        addressZipCode,
-        creditCardNumber,
-        cvv,
-        expiry,
-        license,
-        nameOnCard
-      }: RegisterInput): Promise<ResponseError | User> {
 
-        console.log(password);
-
-        const userExists = await User.findOne({email});
-
-        if(userExists) {
-            
-            return new ResponseError(
-                'User with that email already exists',
-                'register'
-            );
-        }
-
-        const userRole = await Role.findOne({
-          where: {
-            roleName: 'user'
-          }
-        });
-
-        if(!userRole) {
-          return new ResponseError(
-            'Something went wrong, try after sometime.',
-            'register'
-          );
-        }
-
-        const exp = new Date(expiry);
-
-        const billing = await Billing.create({
-          license,
-          addressFirstLine,
-          addressSecondLine,
-          addressThirdLine,
-          addressZipCode,
-          creditCardNumber,
-          cvv,
-          expiry: exp,
-          nameOnCard
-        }).save();
-
-        const user = await User.create({
-            firstName,
-            lastName,
-            email,
-            password,
-            roles: [
-              userRole
-            ],
-            billing
-          }).save();
-
-        return user;
+    const userRole = await Role.findOne({
+      where: {
+        roleName: 'user'
       }
+    });
+
+    if (!userRole) {
+      throw new ResponseError(
+        'Something went wrong, try after sometime.',
+        'register'
+      );
+    }
+
+    const exp = new Date(expiry);
+    const memershipExpiryDate = new Date(membershipExpiry);
+
+    const membershipDetails = await MembershipDetails.create({
+      license,
+      addressFirstLine,
+      addressSecondLine,
+      addressThirdLine,
+      addressZipCode,
+      creditCardNumber,
+      cvv,
+      expiry: exp,
+      nameOnCard,
+      membershipExpiry: memershipExpiryDate
+    }).save();
+
+    const user = await User.create({
+      firstName,
+      lastName,
+      email,
+      password,
+      roles: [
+        userRole
+      ],
+      membershipDetails
+    }).save();
+
+    return user;
+  }
 }

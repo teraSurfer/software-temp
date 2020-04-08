@@ -16,13 +16,12 @@ export const SERVER = {
 
 export const DB = {
     // DBI_URI: process.env.DB_URI
-}
+};
 
 export const SESSION = {
     SECRET: process.env.SESSION_SECRET || 'NotSoSecret'
-}
+};
 
 export const FRONTEND = {
     URL: process.env.FRONTEND_URL
-}
-
+};

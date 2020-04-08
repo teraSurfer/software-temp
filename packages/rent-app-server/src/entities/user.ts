@@ -1,12 +1,13 @@
 import * as bcrypt from 'bcryptjs';
 
 import {
-    Entity, BaseEntity, PrimaryGeneratedColumn, Column, BeforeInsert, ManyToMany, JoinTable, OneToOne, JoinColumn, OneToMany
+    Entity, BaseEntity, PrimaryGeneratedColumn, Column, BeforeInsert, ManyToMany, JoinTable, OneToOne, OneToMany, JoinColumn
 } from 'typeorm';
 import { Role } from './roles';
 import { ObjectType, Field, ID } from 'type-graphql';
-import { Billing } from './billing';
+import { MembershipDetails } from './membershipDetails';
 import { Reservation } from './reservation';
+import {Payment} from './payment';
 
 /*
  * File Created: Sunday, 1st March 2020
@@ -43,14 +44,18 @@ export class User extends BaseEntity {
     @JoinTable({name: 'user_roles'})
     roles: Role[];
 
-    @Field(() => Billing, {nullable: true})
-    @OneToOne(() => Billing, billing => billing.user)
-    @JoinColumn()
-    billing?: Billing;
+    @Field(() => MembershipDetails, {nullable: true})
+    @OneToOne(() => MembershipDetails, mdetails => mdetails.user)
+    @JoinColumn({name: 'membership_details'})
+    membershipDetails?: MembershipDetails;
 
     @Field(() => Reservation, {nullable: true})
     @OneToMany(() => Reservation, r => r.user)
     reservations: Reservation[];
+
+    @Field(() => Payment, {nullable: true})
+    @OneToMany(() => Payment, p => p.user)
+    payments: Payment[];
 
     @BeforeInsert()
     async hashPassword() {

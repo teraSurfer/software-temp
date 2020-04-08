@@ -11,7 +11,7 @@ import { User } from './user';
 
 @ObjectType()
 @Entity()
-export class Billing extends BaseEntity {
+export class MembershipDetails extends BaseEntity {
     
     @Field(() => ID)
     @PrimaryGeneratedColumn('increment')
@@ -46,15 +46,19 @@ export class Billing extends BaseEntity {
     nameOnCard: string;
 
     @Field()
-    @Column()
+    @Column('date')
     expiry: Date;
 
     @Field()
     @Column('varchar')
     cvv: string;
 
+    @Field()
+    @Column('date', {name: 'membership_expiry'})
+    membershipExpiry: Date;
+
     @Field(() => User)
-    @OneToOne(() => User, user => user.billing)
+    @OneToOne(() => User, user => user.membershipDetails)
     user: User;
 
 }

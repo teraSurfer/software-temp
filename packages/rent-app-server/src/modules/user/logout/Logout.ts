@@ -14,16 +14,17 @@ export class LogoutResolver {
     @Mutation(() => Boolean)
     async logout(
         @Ctx() ctx: AppContext): Promise<boolean> {
+            console.log(ctx.req.session!.userId);
             return new Promise((res, rej) => {
-                ctx.req.session!.destroy(err => {
-                    if (err) {
-                        console.log(err);
-                        return rej(false);
-                    }
-
+            ctx.req.session!.destroy(err => {
+                if (err) {
+                    console.log(err);
+                    throw rej(false);
+                } else {
                     ctx.res.clearCookie('sid');
                     return res(true);
-                });
+                }
             });
-        }
+        });
+    }
 }

@@ -1,6 +1,7 @@
 import { ObjectType, Field, ID, Float } from 'type-graphql';
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Vehicle } from './vehicle';
+import { Price } from './price';
 
 /*
  * File Created: Sunday, 29th March 2020
@@ -32,4 +33,8 @@ export class VehicleType extends BaseEntity {
     @Field(() => Vehicle)
     @OneToMany( () => Vehicle, v => v.vehicleType)
     vehicles: Vehicle[];
+
+    @Field(() => Price, {nullable: true})
+    @OneToMany(() => Price, p => p.vehicleType)
+    prices: Price[];
 }

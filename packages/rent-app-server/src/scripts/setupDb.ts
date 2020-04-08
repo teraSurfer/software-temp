@@ -57,6 +57,6 @@ const setupDatabase = async () => {
     } catch (err) {
         console.error(err);
     }
-}
+};
 
 setupDatabase();

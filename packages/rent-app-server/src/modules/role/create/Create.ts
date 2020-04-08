@@ -26,7 +26,7 @@ export class CreateRoleResolver {
             });
 
             if(isRolePresent) {
-                return new ResponseError(
+                throw new ResponseError(
                     'A role with that name is already present.',
                     'createRole'
                 );
@@ -40,7 +40,7 @@ export class CreateRoleResolver {
             return role;
 
         } catch (err) {
-            return new ResponseError(
+            throw new ResponseError(
                 'Something went wrong, try again later.',
                 'createRole'
             );

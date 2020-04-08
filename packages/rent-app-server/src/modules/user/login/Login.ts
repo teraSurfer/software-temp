@@ -19,13 +19,13 @@ export class LoginResolver {
         email,
         password
     }: LoginInput,
-    @Ctx() ctx: AppContext) {
-        const user = await User.findOne({email}, {
+        @Ctx() ctx: AppContext) {
+        const user = await User.findOne({ email }, {
             relations: ['roles']
         });
 
         if (!user) {
-            return new ResponseError(
+            throw new ResponseError(
                 'Invalid email, try again.',
                 'login'
             );
@@ -37,7 +37,7 @@ export class LoginResolver {
         );
 
         if (!valid) {
-            return new ResponseError(
+            throw new ResponseError(
                 'Invalid password, try again.',
                 'login'
             );

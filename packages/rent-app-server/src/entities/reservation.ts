@@ -1,7 +1,8 @@
 import { Field, ID, ObjectType } from 'type-graphql';
-import { BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne, Entity } from 'typeorm';
+import { BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne, Entity, OneToOne } from 'typeorm';
 import { User } from './user';
 import { Vehicle } from './vehicle';
+import { Payment } from './payment';
 
 /*
  * File Created: Sunday, 29th March 2020
@@ -37,5 +38,10 @@ export class Reservation extends BaseEntity {
     @Field()
     @Column('timestamptz', {name: 'reservation_end'})
     reservationEnd: Date;
+
+    @Field(() => Payment)
+    @OneToOne(() => Payment, p => p.reservation)
+    payment: Payment;
+    
 
 }

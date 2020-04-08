@@ -19,7 +19,7 @@ export class FindRolesResolver {
             const roles = Role.find();
             return roles;
         } catch (err) {
-            return new ResponseError(
+            throw new ResponseError(
                 'Could not query db, try again later.',
                 'findAllRoles'
             );
@@ -39,7 +39,7 @@ export class FindRolesResolver {
 
             return role;
         } catch (err) {
-            return new ResponseError (
+            throw new ResponseError (
                 'Could not query db, try again later.',
                 'findOneRoles'
             );
