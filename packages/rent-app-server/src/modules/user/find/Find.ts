@@ -16,7 +16,7 @@ import { User } from '../../../entities/user';
 @Resolver()
 export class UserResolver {
 
-    @Authorized()
+    @Authorized(['admin', 'user'])
     @Query(() => UserResponseUnion)
     async me(@Ctx() ctx: AppContext) {
         const currentUser = await User.findOne({ id: ctx.req.session!.userId }, {
@@ -31,12 +31,20 @@ export class UserResolver {
     async findAllUsers() {
         try {
             const users = await User.find({
-                relations: ['roles']
+                relations: ['roles', 'membershipDetails']
+            });
+            users.map(user => {
+                if(!user.membershipDetails) return user;
+                else {
+                    user.membershipDetails.expiry = new Date(user.membershipDetails.expiry).toLocaleDateString();
+                    user.membershipDetails.membershipExpiry = new Date(user.membershipDetails.membershipExpiry).toLocaleDateString();
+                    return user;
+                }
             });
             return users;
         } catch (err) {
             throw new ResponseError(
-                'Cannot query db, try again later.',
+                err.message,
                 'findAllUsers'
             );
         }
@@ -44,7 +52,7 @@ export class UserResolver {
 
     @Authorized(['admin'])
     @Query(() => UserResponseUnion)
-    async findOneUser(@Arg('id') id?: string, @Arg('email') email?: string) {
+    async findOneUser(@Arg('id') id: string = '', @Arg('email') email: string = '') {
         try {
             if (id !== '') {
                 const user = await User.findOne({id}, {

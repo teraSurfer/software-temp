@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcryptjs';
 
 import {
-    Entity, BaseEntity, PrimaryGeneratedColumn, Column, BeforeInsert, ManyToMany, JoinTable, OneToOne, OneToMany, JoinColumn
+    Entity, BaseEntity, PrimaryGeneratedColumn, Column, BeforeInsert, ManyToMany, JoinTable, OneToOne, OneToMany
 } from 'typeorm';
 import { Role } from './roles';
 import { ObjectType, Field, ID } from 'type-graphql';
@@ -46,7 +46,6 @@ export class User extends BaseEntity {
 
     @Field(() => MembershipDetails, {nullable: true})
     @OneToOne(() => MembershipDetails, mdetails => mdetails.user)
-    @JoinColumn({name: 'membership_details'})
     membershipDetails?: MembershipDetails;
 
     @Field(() => Reservation, {nullable: true})

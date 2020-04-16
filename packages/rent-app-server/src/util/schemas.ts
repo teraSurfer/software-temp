@@ -7,7 +7,7 @@ import { UserResolver } from '../modules/user/find/Find';
 import { CreateUserResolver } from '../modules/user/create/Create';
 import { FindRolesResolver } from '../modules/role/find/Find';
 import { CreateRoleResolver } from '../modules/role/create/Create';
-
+import { CreateVehicleTypeResolver } from '../modules/vehicleType/create/Create';
 /*
  * File Created: Sunday, 1st March 2020
  * Author: Achalaesh Lanka (me@terasurfer.com)
@@ -15,7 +15,7 @@ import { CreateRoleResolver } from '../modules/role/create/Create';
  * Copyright (c) 2020
  */
 
-export const generateSchemas = () => 
+export const generateSchemas = () =>
   buildSchema({
     resolvers: [
       RegisterResolver,
@@ -24,7 +24,8 @@ export const generateSchemas = () =>
       UserResolver,
       CreateUserResolver,
       FindRolesResolver,
-      CreateRoleResolver
+      CreateRoleResolver,
+      CreateVehicleTypeResolver,
     ],
     authChecker: authCheck
   });

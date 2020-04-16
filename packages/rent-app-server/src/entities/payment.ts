@@ -1,7 +1,8 @@
-import { ObjectType, Field, ID } from 'type-graphql';
-import { Entity, BaseEntity, PrimaryGeneratedColumn, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
+import { ObjectType, Field, ID, Float } from 'type-graphql';
+import { Entity, BaseEntity, PrimaryGeneratedColumn, ManyToOne, OneToOne, JoinColumn, Column } from 'typeorm';
 import { User } from './user';
 import { Reservation } from './reservation';
+import { Price } from './price';
 
 /*
  * File Created: Monday, 30th March 2020
@@ -26,6 +27,14 @@ export class Payment extends BaseEntity {
     @OneToOne(() => Reservation, r => r.payment)
     @JoinColumn()
     reservation: Reservation;
+
+    @Field(() => Price)
+    @ManyToOne(() => Price, p => p.payments)
+    price: Price;
+
+    @Field(() => Float)
+    @Column('float', {name: 'total_cost'})
+    totalCost: number;
 
 }
 

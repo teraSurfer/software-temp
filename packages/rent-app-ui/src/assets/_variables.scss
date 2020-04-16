@@ -1,0 +1,25 @@
+@charset 'utf-8';
+
+@import url('https://fonts.googleapis.com/css?family=Varela+Round|Nunito:700&display=swap');
+
+
+$font-family-sans-serif:  "Varela Round", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+
+$headings-font-family:  "Nunito", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$headings-font-weight: 700;
+
+// Color schemes
+
+@import './colors';
+
+$theme-colors: (
+    "primary": $primary,
+    "accent": $accent,
+    "dark": $dark-gray,
+);
+
+
+$navbar-dark-color: rgba($white, .8) !default;
+$navbar-dark-hover-color: rgba($white, 1) !default;
+$navbar-dark-toggler-border-color: rgba($white, 0) !default;
+$body-bg: rgb(247, 247, 247);

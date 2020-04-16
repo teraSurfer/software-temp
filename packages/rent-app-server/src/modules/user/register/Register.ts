@@ -15,7 +15,8 @@ import { MembershipDetails } from '../../../entities/membershipDetails';
 
 @Resolver()
 export class RegisterResolver {
-  @Authorized(['user', 'admin'])
+  
+  @Authorized(['admin', 'user'])
   @Query(() => String)
   hello() {
     return 'Hello world';
@@ -66,7 +67,19 @@ export class RegisterResolver {
     const exp = new Date(expiry);
     const memershipExpiryDate = new Date(membershipExpiry);
 
-    const membershipDetails = await MembershipDetails.create({
+    
+
+    const user = await User.create({
+      firstName,
+      lastName,
+      email,
+      password,
+      roles: [
+        userRole
+      ]
+    }).save();
+
+    await MembershipDetails.create({
       license,
       addressFirstLine,
       addressSecondLine,
@@ -76,18 +89,8 @@ export class RegisterResolver {
       cvv,
       expiry: exp,
       nameOnCard,
-      membershipExpiry: memershipExpiryDate
-    }).save();
-
-    const user = await User.create({
-      firstName,
-      lastName,
-      email,
-      password,
-      roles: [
-        userRole
-      ],
-      membershipDetails
+      membershipExpiry: memershipExpiryDate,
+      user
     }).save();
 
     return user;

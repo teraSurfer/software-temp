@@ -1,6 +1,7 @@
 import { Resolver, Authorized, Mutation, Arg } from 'type-graphql';
-import { VehicleTypeResponseUnion } from '../../shared';
+import { VehicleTypeResponseUnion, ResponseError } from '../../shared';
 import { CreateVehicleTypeInput } from './CreateInput';
+import { VehicleType } from '../../../entities/vehicleTypes';
 
 /*
  * File Created: Sunday, 29th March 2020
@@ -10,14 +11,39 @@ import { CreateVehicleTypeInput } from './CreateInput';
  */
 
 @Resolver()
-export class CreateVehicleType {
+export class CreateVehicleTypeResolver {
 
     @Authorized(['admin'])
     @Mutation(() => VehicleTypeResponseUnion)
     async createVehicleType(
-        @Arg('input') input: CreateVehicleTypeInput
+        @Arg('input') {
+            vehicleType,
+            vehicleDescription,
+        }: CreateVehicleTypeInput
     ) {
-        console.log(input);
-        return;
+        try {
+            const vehicleTypeExists = await VehicleType.findOne({
+                vehicleType
+            });
+
+            if(vehicleTypeExists) {
+                throw new ResponseError(
+                    'A similar vehicle type already exits.',
+                    'createVehicleType'
+                );
+            }
+
+            const vt = await VehicleType.create({
+                vehicleType,
+                vehicleTypeDescription: vehicleDescription,
+            }).save();
+
+            return vt;
+        } catch(err) {
+            throw new ResponseError(
+                err.message,
+                'createVehicleType'
+            );
+        }
     }
 }

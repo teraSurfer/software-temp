@@ -1,5 +1,5 @@
 import { ObjectType, Field, ID } from 'type-graphql';
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, BaseEntity } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, BaseEntity, JoinColumn } from 'typeorm';
 import { User } from './user';
 
 /*
@@ -10,7 +10,7 @@ import { User } from './user';
  */
 
 @ObjectType()
-@Entity()
+@Entity('membership_details')
 export class MembershipDetails extends BaseEntity {
     
     @Field(() => ID)
@@ -45,20 +45,21 @@ export class MembershipDetails extends BaseEntity {
     @Column('varchar', {name: 'name_on_card'})
     nameOnCard: string;
 
-    @Field()
+    @Field(() => String, {nullable: true})
     @Column('date')
-    expiry: Date;
+    expiry: Date | string;
 
     @Field()
     @Column('varchar')
     cvv: string;
 
-    @Field()
+    @Field(() => String, {nullable: true})
     @Column('date', {name: 'membership_expiry'})
-    membershipExpiry: Date;
+    membershipExpiry: Date | string;
 
     @Field(() => User)
     @OneToOne(() => User, user => user.membershipDetails)
+    @JoinColumn({name: 'user'})
     user: User;
 
 }

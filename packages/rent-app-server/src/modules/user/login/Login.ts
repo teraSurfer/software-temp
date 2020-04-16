@@ -23,12 +23,16 @@ export class LoginResolver {
         const user = await User.findOne({ email }, {
             relations: ['roles']
         });
-
+        
         if (!user) {
             throw new ResponseError(
                 'Invalid email, try again.',
                 'login'
             );
+        }
+
+        if(!user.membershipDetails) {
+            user.membershipDetails = undefined;
         }
 
         const valid = await bcrypt.compare(
@@ -44,8 +48,7 @@ export class LoginResolver {
         }
 
         ctx.req.session!.userId = user.id;
-        // ctx.req.session!.userRole = user.roles.map(val => val.roleName);
-
+        console.log(user);
         return user;
     }
 }

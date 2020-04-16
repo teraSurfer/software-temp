@@ -26,15 +26,11 @@ export class VehicleType extends BaseEntity {
     @Column('text', {name: 'vehicle_type_description'})
     vehicleTypeDescription: string;
 
-    @Field(() => Float)
-    @Column('numeric', { name: 'hourly_rate' })
-    hourlyRate: number;
-
-    @Field(() => Vehicle)
-    @OneToMany( () => Vehicle, v => v.vehicleType)
-    vehicles: Vehicle[];
+    @Field(() => Vehicle, {nullable: true})
+    @OneToMany(() => Vehicle, v => v.vehicleType)
+    vehicles?: Vehicle[];
 
     @Field(() => Price, {nullable: true})
     @OneToMany(() => Price, p => p.vehicleType)
-    prices: Price[];
+    prices?: Price[];
 }

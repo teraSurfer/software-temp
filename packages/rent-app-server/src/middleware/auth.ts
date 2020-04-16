@@ -19,7 +19,6 @@ export const authCheck: AuthChecker<AppContext> = async (
             userId: req.session!.userId,
             roles
         }).getCount();
-        console.log(authorized);
         return (authorized !== 0);
     }
 };

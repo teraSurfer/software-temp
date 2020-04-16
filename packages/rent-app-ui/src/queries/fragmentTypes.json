@@ -1,0 +1,42 @@
+{
+  "__schema": {
+    "types": [
+      {
+        "kind": "UNION",
+        "name": "UserResponse",
+        "possibleTypes": [
+          {
+            "name": "User"
+          },
+          {
+            "name": "ResponseError"
+          }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "RoleResponse",
+        "possibleTypes": [
+          {
+            "name": "Role"
+          },
+          {
+            "name": "ResponseError"
+          }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "VehicleTypeResponse",
+        "possibleTypes": [
+          {
+            "name": "VehicleType"
+          },
+          {
+            "name": "ResponseError"
+          }
+        ]
+      }
+    ]
+  }
+}
