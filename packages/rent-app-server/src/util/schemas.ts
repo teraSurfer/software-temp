@@ -11,6 +11,10 @@ import { CreateVehicleTypeResolver } from '../modules/vehicleType/create/Create'
 import { FindVehicleTypeResolver } from '../modules/vehicleType/find/Find';
 import { UpdateVehicleTypeResolver } from '../modules/vehicleType/update/Update';
 import { DeleteVehicleTypeResolver } from '../modules/vehicleType/delete/Delete';
+import { FindLocationResolver } from '../modules/location/find/Find';
+import { CreateLocationResolver } from '../modules/location/create/Create';
+import { UpdateLocationResolver } from '../modules/location/update/Update';
+import { DeleteLocationResolver } from '../modules/location/delete/Delete';
 /*
  * File Created: Sunday, 1st March 2020
  * Author: Achalaesh Lanka (me@terasurfer.com)
@@ -31,7 +35,11 @@ export const generateSchemas = () =>
       CreateVehicleTypeResolver,
       FindVehicleTypeResolver,
       UpdateVehicleTypeResolver,
-      DeleteVehicleTypeResolver
+      DeleteVehicleTypeResolver,
+      FindLocationResolver,
+      CreateLocationResolver,
+      UpdateLocationResolver,
+      DeleteLocationResolver
     ],
     authChecker: authCheck
   });
