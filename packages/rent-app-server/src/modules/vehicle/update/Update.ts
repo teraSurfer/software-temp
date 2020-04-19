@@ -56,7 +56,7 @@ export class UpdateVehicleResolver {
                 currentMileage,
                 vehicleType: vt,
                 year
-            })
+            });
         } catch (err) {
             throw new ResponseError(err.message, 'updateVehicle');
         }

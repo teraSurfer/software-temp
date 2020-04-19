@@ -15,7 +15,7 @@ export class Location extends BaseEntity {
 
     @Field(() => ID)
     @PrimaryGeneratedColumn('increment')
-    id: string;
+    id: number;
 
     @Field(() => String)
     @Column('varchar', {name: 'location_name'})
