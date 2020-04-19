@@ -40,8 +40,8 @@ export class Vehicle extends BaseEntity {
     currentMileage: number;
 
     @Field()
-    @Column('timestamptz', {name: 'last_serviced'})
-    lastServiced: Date;
+    @Column('date', {name: 'last_serviced'})
+    lastServiced: Date | string;
 
     @Field(() => String)
     @Column('varchar')
@@ -51,11 +51,11 @@ export class Vehicle extends BaseEntity {
     @ManyToOne(() => VehicleType, vt => vt.vehicles)
     vehicleType: VehicleType;
 
-    @Field(() => Location)
+    @Field(() => Location, {nullable: true})
     @ManyToOne(() => Location, l => l.vehicles)
     location: Location;
 
-    @Field(() => Reservation)
+    @Field(() => Reservation, {nullable: true})
     @OneToMany(() => Reservation, r => r.vehicle)
     reservations: Reservation[];
 }

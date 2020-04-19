@@ -67,13 +67,34 @@ const ME = gql`
     }
 `;
 
+const ALL_USERS = gql`
+    query FindAllUsers {
+        findAllUsers {
+            ... on User {
+                id,
+                email,
+                firstName,
+                lastName,
+                roles {
+                    roleName
+                }
+            }
+            ... on ResponseError {
+                message,
+                path
+            }
+        }
+    }
+`;
+
 export {
     HELLO_QUERY,
     USER_LOGIN,
     ME,
     LOGGED_IN,
     LOGOUT,
+    ALL_USERS,
+    USER_STATE,
     typeDefs,
     resolvers,
-    USER_STATE
 };
