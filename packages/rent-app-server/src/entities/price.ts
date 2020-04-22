@@ -26,8 +26,8 @@ export class Price extends BaseEntity {
     @Column('float')
     cost: number;
 
-    @Field(() => Int)
-    @Column('int', {name: 'number_of_hours'})
+    @Field(() => Int, {nullable: true})
+    @Column('int', {name: 'number_of_hours', nullable: true})
     numberOfHours: number;
     
 

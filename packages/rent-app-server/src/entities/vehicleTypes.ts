@@ -1,4 +1,4 @@
-import { ObjectType, Field, ID, Float } from 'type-graphql';
+import { ObjectType, Field, ID} from 'type-graphql';
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Vehicle } from './vehicle';
 import { Price } from './price';

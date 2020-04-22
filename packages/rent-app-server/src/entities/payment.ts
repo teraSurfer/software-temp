@@ -1,5 +1,5 @@
 import { ObjectType, Field, ID, Float } from 'type-graphql';
-import { Entity, BaseEntity, PrimaryGeneratedColumn, ManyToOne, OneToOne, JoinColumn, Column } from 'typeorm';
+import { Entity, BaseEntity, PrimaryGeneratedColumn, ManyToOne, OneToOne, Column } from 'typeorm';
 import { User } from './user';
 import { Reservation } from './reservation';
 import { Price } from './price';

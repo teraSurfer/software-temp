@@ -39,7 +39,7 @@ export class Vehicle extends BaseEntity {
     @Column('int', {name: 'current_mileage'})
     currentMileage: number;
 
-    @Field()
+    @Field(() => String)
     @Column('date', {name: 'last_serviced'})
     lastServiced: Date | string;
 
