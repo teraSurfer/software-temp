@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType } from 'type-graphql';
-import { BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne, Entity, OneToOne } from 'typeorm';
+import { BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne, Entity, OneToOne, JoinColumn } from 'typeorm';
 import { User } from './user';
 import { Vehicle } from './vehicle';
 import { Payment } from './payment';
@@ -41,7 +41,7 @@ export class Reservation extends BaseEntity {
 
     @Field(() => Payment)
     @OneToOne(() => Payment, p => p.reservation)
+    @JoinColumn()
     payment: Payment;
     
-
 }

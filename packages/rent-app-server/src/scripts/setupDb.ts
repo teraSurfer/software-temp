@@ -1,6 +1,7 @@
 import { getConnectionOptions, createConnection } from 'typeorm';
 import { Role } from '../entities/roles';
 import { User } from '../entities/user';
+import { Price } from '../entities/price';
 
 /*
  * File Created: Wednesday, 4th March 2020
@@ -52,7 +53,13 @@ const setupDatabase = async () => {
 
         await adminUser.save();
 
-        console.info(admin);
+        const membershipPrice = Price.create({
+            cost: 49.99,
+            name: '6 month membership cost',
+        });
+
+        await membershipPrice.save();
+        console.info({ admin, membershipPrice });
 
     } catch (err) {
         console.error(err);

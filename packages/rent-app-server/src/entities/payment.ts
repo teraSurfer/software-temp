@@ -25,7 +25,6 @@ export class Payment extends BaseEntity {
 
     @Field(() => Reservation, {nullable: true})
     @OneToOne(() => Reservation, r => r.payment)
-    @JoinColumn()
     reservation: Reservation;
 
     @Field(() => Price)

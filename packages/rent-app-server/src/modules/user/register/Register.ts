@@ -37,7 +37,6 @@ export class RegisterResolver {
     expiry,
     license,
     nameOnCard,
-    membershipExpiry
   }: RegisterInput): Promise<ResponseError | User> {
 
     console.log(password);
@@ -65,7 +64,6 @@ export class RegisterResolver {
     }
 
     const exp = new Date(expiry);
-    const memershipExpiryDate = new Date(membershipExpiry);
 
     
 
@@ -78,6 +76,10 @@ export class RegisterResolver {
         userRole
       ]
     }).save();
+    const expiryDate = new Date();
+
+    expiryDate.setMonth(expiryDate.getMonth()+6);
+
 
     await MembershipDetails.create({
       license,
@@ -89,7 +91,7 @@ export class RegisterResolver {
       cvv,
       expiry: exp,
       nameOnCard,
-      membershipExpiry: memershipExpiryDate,
+      membershipExpiry: expiryDate,
       user
     }).save();
 
