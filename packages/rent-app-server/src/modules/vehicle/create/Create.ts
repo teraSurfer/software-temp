@@ -54,6 +54,7 @@ export class CreateVehicleResolver {
                 year,
                 vehicleType: vt,
                 condition,
+                registrationTag,
                 currentMileage,
                 lastServiced: ls,
                 location: l

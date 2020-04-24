@@ -1,4 +1,4 @@
-import { ObjectType, Field, ID, Float, Int } from 'type-graphql';
+import { ObjectType, Field, ID, Float } from 'type-graphql';
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 import { VehicleType } from './vehicleTypes';
 import { Payment } from './payment';
@@ -26,9 +26,9 @@ export class Price extends BaseEntity {
     @Column('float')
     cost: number;
 
-    @Field(() => Int, {nullable: true})
-    @Column('int', {name: 'number_of_hours', nullable: true})
-    numberOfHours: number;
+    @Field(() => String, {nullable: true})
+    @Column('varchar', {nullable: true})
+    duration: string;
     
 
     @Field(() => VehicleType, {nullable: true})

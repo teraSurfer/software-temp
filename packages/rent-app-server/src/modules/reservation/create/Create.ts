@@ -49,7 +49,7 @@ export class CreateReservationResolver {
             }).save();
 
             const reservation = await Reservation.create({
-                status,
+                status: 'accepted',
                 reservationEnd: new Date(reservationEnd),
                 reservationStart: new Date(reservationStart),
                 vehicle,

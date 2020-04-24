@@ -4,6 +4,8 @@ import { RegisterInput } from './RegisterInput';
 import { UserResponseUnion, ResponseError } from '../../shared';
 import { Role } from '../../../entities/roles';
 import { MembershipDetails } from '../../../entities/membershipDetails';
+import { Payment } from '../../../entities/payment';
+import { Price } from '../../../entities/price';
 
 
 /*
@@ -15,7 +17,7 @@ import { MembershipDetails } from '../../../entities/membershipDetails';
 
 @Resolver()
 export class RegisterResolver {
-  
+
   @Authorized(['admin', 'user'])
   @Query(() => String)
   hello() {
@@ -65,8 +67,6 @@ export class RegisterResolver {
 
     const exp = new Date(expiry);
 
-    
-
     const user = await User.create({
       firstName,
       lastName,
@@ -78,7 +78,9 @@ export class RegisterResolver {
     }).save();
     const expiryDate = new Date();
 
-    expiryDate.setMonth(expiryDate.getMonth()+6);
+    expiryDate.setMonth(expiryDate.getMonth() + 6);
+
+    const price = await Price.findOne({ name: '6 month membership cost' });
 
 
     await MembershipDetails.create({
@@ -93,6 +95,12 @@ export class RegisterResolver {
       nameOnCard,
       membershipExpiry: expiryDate,
       user
+    }).save();
+
+    await Payment.create({
+      price,
+      user,
+      totalCost: price?.cost,
     }).save();
 
     return user;

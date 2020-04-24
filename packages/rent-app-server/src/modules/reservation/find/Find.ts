@@ -1,6 +1,9 @@
 import { Resolver, Query, Authorized, Arg } from 'type-graphql';
-import { ReservationResponseUnion, ResponseError } from '../../shared';
+import { ReservationResponseUnion, ResponseError, CountResponse } from '../../shared';
 import { Reservation } from '../../../entities/reservation';
+import { Location } from '../../../entities/location';
+import { Vehicle } from '../../../entities/vehicle';
+import { MembershipDetails } from '../../../entities/membershipDetails';
 
 /*
  * File Created: Sunday, 19th April 2020
@@ -33,10 +36,10 @@ export class FindReservationResolver {
     }
 
     @Authorized(['admin'])
-    @Query(() => ReservationResponseUnion)
+    @Query(() => [ReservationResponseUnion])
     async findAllReservation(
-        @Arg('skip') skip: number = 0,
-        @Arg('take') take: number = 10
+        @Arg('skip', {defaultValue: 0}) skip: number = 0,
+        @Arg('take', {defaultValue: 10}) take: number = 10
     ) {
         try {
             return Reservation.find({
@@ -51,6 +54,23 @@ export class FindReservationResolver {
                 err.message,
                 'findAllReservations'
             );
+        }
+    }
+
+    @Authorized(['admin'])
+    @Query(() => CountResponse)
+    async getCounts() {
+        try {
+            const cr = new CountResponse();
+
+            cr.reservationCount = await Reservation.count();
+            cr.locationsCount = await Location.count();
+            cr.vehiclesCount = await Vehicle.count();
+            cr.membersCount = await MembershipDetails.count();
+
+            return cr;
+        } catch (err) {
+            throw new Error(err.message);
         }
     }
 }

@@ -13,7 +13,7 @@ import { Role } from '../../../entities/roles';
 export class FindRolesResolver {
 
     @Authorized(['admin'])
-    @Query(() => RoleResponseUnion)
+    @Query(() => [RoleResponseUnion])
     async findAllRoles () {
         try {
             const roles = Role.find();

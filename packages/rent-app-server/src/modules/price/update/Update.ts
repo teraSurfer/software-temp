@@ -15,7 +15,7 @@ export class UpdatePriceResolver {
 
     @Authorized(['admin'])
     @Mutation(() => PriceResponseUnion)
-    async updatePrice(@Arg('data') { id, vehicleTypeId, name, cost, numberOfHours }: UpdatePriceInput) {
+    async updatePrice(@Arg('data') { id, vehicleTypeId, name, cost, duration }: UpdatePriceInput) {
         try {
             const priceExists = await Price.findOne({ id });
             const priceWithName = await Price.findOne({ name });
@@ -29,7 +29,7 @@ export class UpdatePriceResolver {
                 vehicleType,
                 name,
                 cost,
-                numberOfHours
+                duration
             });
         } catch (err) {
             throw new ResponseError(err.message, 'updatePrice');

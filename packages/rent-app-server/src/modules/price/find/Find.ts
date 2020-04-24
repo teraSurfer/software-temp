@@ -17,13 +17,12 @@ export class FindPriceResolver {
     @Query(() => PriceResponseUnion)
     async findOnePrice(@Arg('id', { defaultValue: NaN }) id: number, @Arg('name', { defaultValue: '' }) name: string) {
         try {
-
             if (!isNaN(id))
-                return await Price.findOne({
+                return await Price.findOneOrFail({
                     id
-                });
+                }, {relations: ['vehicleType', 'payments']});
             else if (name !== '') {
-                return await Price.findOne({ name });
+                return await Price.findOneOrFail({ name },{relations: ['vehicleType', 'payments']});
             } else {
                 throw new ResponseError('Need either id or name', 'findOnePrice');
             }
@@ -33,10 +32,10 @@ export class FindPriceResolver {
     }
 
     @Authorized(['admin'])
-    @Query(() => PriceResponseUnion)
+    @Query(() => [PriceResponseUnion])
     async findAllPrices(@Arg('skip', { defaultValue: 0 }) skip: number, @Arg('take', { defaultValue: 10 }) take: number) {
         try {
-            return await Price.find({ order: { id: 'ASC' }, take, skip });
+            return await Price.find({ relations: ['vehicleType'], order: { id: 'ASC' }, take, skip });
         } catch (err) {
             throw new ResponseError(err.message, 'findAllPrices');
         }
@@ -44,10 +43,10 @@ export class FindPriceResolver {
 
     @Authorized(['user', 'admin'])
     @Query(() => PriceResponseUnion)
-    async findPriceForVehicleType(@Arg('vehicleType') vt: string, @Arg('numberOfHours') numberOfHours: number) {
+    async findPriceForVehicleType(@Arg('vehicleType') vt: string, @Arg('duration') duration: string) {
         try {
             const vehicleType = await VehicleType.findOneOrFail({ vehicleType: vt });
-            return await Price.findOne({ vehicleType, numberOfHours });
+            return await Price.findOne({ vehicleType, duration });
         } catch (err) {
             throw new ResponseError(err.message, 'findPriceForVehicleType');
         }

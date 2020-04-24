@@ -1,21 +1,37 @@
 @import '../../assets/variables';
-$navbar-dark-toggler-icon-bg: url("/images/bars.svg") !default;
+$navbar-dark-toggler-icon-bg: url('/images/bars.svg') !default;
 
 @import '~bootstrap/scss/bootstrap.scss';
 
 .dropdown-toggle-no-caret::after {
-    content: none;
+  content: none;
 }
 
 .hw {
-    min-height: calc(100vh - 56px);
+  min-height: calc(100vh - 56px);
 }
 
 .rent {
-    height: 250px;
-    width: 250px;
+  height: 250px;
+  width: 250px;
 }
 
-html, body{
-    height: 100%;
+html,
+body {
+  height: 100%;
+}
+
+.pagination {
+  margin-bottom: 0;
+}
+
+.main-content {
+  @media screen and (min-width: 991px) {
+    height: calc(100vh - 56px);
+    overflow-y: scroll;
+  }
+}
+
+.table-hover tbody tr:hover {
+    cursor: pointer;
 }

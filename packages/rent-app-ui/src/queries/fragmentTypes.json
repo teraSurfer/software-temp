@@ -36,6 +36,54 @@
             "name": "ResponseError"
           }
         ]
+      },
+      {
+        "kind": "UNION",
+        "name": "LocationResponse",
+        "possibleTypes": [
+          {
+            "name": "Location"
+          },
+          {
+            "name": "ResponseError"
+          }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "VehicleResponse",
+        "possibleTypes": [
+          {
+            "name": "Vehicle"
+          },
+          {
+            "name": "ResponseError"
+          }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "ReservationResponse",
+        "possibleTypes": [
+          {
+            "name": "Reservation"
+          },
+          {
+            "name": "ResponseError"
+          }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "PriceResponse",
+        "possibleTypes": [
+          {
+            "name": "Price"
+          },
+          {
+            "name": "ResponseError"
+          }
+        ]
       }
     ]
   }

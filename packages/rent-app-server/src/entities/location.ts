@@ -26,7 +26,7 @@ export class Location extends BaseEntity {
     addressFirstLine: string;
 
     @Field({nullable: true})
-    @Column('text', {name: 'address_second_line'})
+    @Column('text', {name: 'address_second_line', nullable: true})
     addressSecondLine: string;
 
     @Field()

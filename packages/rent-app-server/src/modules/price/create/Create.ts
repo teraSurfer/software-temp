@@ -16,7 +16,7 @@ export class CreatePriceResolver {
 
     @Authorized(['admin'])
     @Mutation(() => PriceResponseUnion)
-    async createPrice(@Arg('data') { vehicleTypeId, name, cost, numberOfHours }: CreatePriceInput) {
+    async createPrice(@Arg('data') { vehicleTypeId, name, cost, duration }: CreatePriceInput) {
         try {
             const priceExists = await Price.findOne({ name }); 
 
@@ -29,7 +29,7 @@ export class CreatePriceResolver {
             return await Price.create({
                 cost,
                 name,
-                numberOfHours,
+                duration,
                 vehicleType
             }).save();
             

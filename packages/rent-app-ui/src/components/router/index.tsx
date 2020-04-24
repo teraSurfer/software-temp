@@ -23,10 +23,10 @@ const Router = ({ children }: RouterProps) => {
         <Route path='/login' exact>
           <Auth />
         </Route>
-        <PrivateRoute path='/dashboard' exact>
+        <PrivateRoute path='/dashboard'>
           <Dashboard />
         </PrivateRoute>
-        <AdminRoute path='/admin-dashboard' exact>
+        <AdminRoute path='/admin-dashboard'>
           <AdminDashboard />
         </AdminRoute>
       </Switch>

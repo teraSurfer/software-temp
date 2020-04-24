@@ -47,21 +47,18 @@ const Login = (props: any) => {
 
   async function handleFormSubmit(evt: any) {
     evt.preventDefault();
-    console.log(loginDetails);
     try {
       const { data } = await loginUser({
         variables: {
           data: loginDetails,
         },
       });
-      console.log(data.login.roles);
       window.localStorage.setItem('LOGGED_IN', 'true');
       data.login.roles.findIndex((role: any) => role.roleName === 'admin') > -1
         ? window.localStorage.setItem('ADMIN', 'true')
         : window.localStorage.setItem('ADMIN', 'false');
         window.location.href = '/';
     } catch (err) {
-      console.log(err.message);
       window.localStorage.setItem('LOGGED_IN', 'false');
       window.localStorage.setItem('ADMIN', 'false');
     }

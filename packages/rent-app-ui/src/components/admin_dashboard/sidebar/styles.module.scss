@@ -1,0 +1,28 @@
+.sidebar {
+    height: calc(100vh - 56px);
+    position: absolute;
+    padding: 0.5rem !important;
+    @media screen and (max-width: 991px){
+        height: auto;
+        padding: 0rem !important;
+    }
+    div {
+        padding: 0.5rem;
+        height: 100%;
+    }
+}
+
+.fw {
+    width: 1rem !important;
+    margin-right: 0.5rem;
+    @media screen and (max-width: 991px){
+        margin-right: 0;
+    }
+}
+
+.navItem {
+    cursor: pointer;
+    @media screen and (max-width: 991px){
+        margin-right: 0;
+    }
+}

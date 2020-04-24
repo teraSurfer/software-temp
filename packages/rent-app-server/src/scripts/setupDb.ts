@@ -55,7 +55,8 @@ const setupDatabase = async () => {
 
         const membershipPrice = Price.create({
             cost: 49.99,
-            name: '6 month membership cost',
+            name: 'membership',
+            duration: '6 months'
         });
 
         await membershipPrice.save();

@@ -26,7 +26,8 @@ export class UpdateReservationResolver {
             }
 
             return await Reservation.update({ id: reservation?.id }, {
-                ...reservation
+                ...reservation,
+                status: 'cancelled'
             });
 
         } catch (err) {

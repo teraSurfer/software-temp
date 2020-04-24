@@ -20,7 +20,7 @@ export class UserResolver {
     @Query(() => UserResponseUnion)
     async me(@Ctx() ctx: AppContext) {
         const currentUser = await User.findOne({ id: ctx.req.session!.userId }, {
-            relations: ['roles']
+            relations: ['roles', 'membershipDetails']
         });
 
         return currentUser;
@@ -28,18 +28,15 @@ export class UserResolver {
 
     @Authorized(['admin'])
     @Query(() => [UserResponseUnion]!)
-    async findAllUsers() {
+    async findAllUsers(@Arg('skip', {defaultValue: 0}) skip: number, @Arg('take', {defaultValue: 10})take: number) {
         try {
             const users = await User.find({
-                relations: ['roles', 'membershipDetails']
-            });
-            users.map(user => {
-                if(!user.membershipDetails) return user;
-                else {
-                    user.membershipDetails.expiry = new Date(user.membershipDetails.expiry).toLocaleDateString();
-                    user.membershipDetails.membershipExpiry = new Date(user.membershipDetails.membershipExpiry).toLocaleDateString();
-                    return user;
-                }
+                relations: ['roles'],
+                order: {
+                    id: 'ASC'
+                },
+                take,
+                skip
             });
             return users;
         } catch (err) {

@@ -30,7 +30,7 @@ export class FindLocationResolver {
 
     @Authorized(['admin', 'user'])
     @Query(() => [LocationResponseUnion])
-    async findAllLocations(@Arg('take') take: number = 10, @Arg('skip') skip: number = 0) {
+    async findAllLocations(@Arg('take', {defaultValue: 10}) take: number = 10, @Arg('skip', {defaultValue: 0}) skip: number = 0) {
         try {
             return await Location.find({
                 order: {

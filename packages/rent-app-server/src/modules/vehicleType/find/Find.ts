@@ -13,8 +13,8 @@ import { VehicleType } from '../../../entities/vehicleTypes';
 export class FindVehicleTypeResolver {
 
     @Authorized(['admin', 'user'])
-    @Query(() => [VehicleTypeResponseUnion]!)
-    async findAllVehicleTypes(@Arg('take') take: number=10, @Arg('skip') skip: number=0) {
+    @Query(() => [VehicleTypeResponseUnion])
+    async findAllVehicleTypes(@Arg('take', {defaultValue: 10}) take: number, @Arg('skip', {defaultValue: 0}) skip: number) {
         try {
             const vehiclesTypes = await VehicleType.find({
                 order: {

@@ -17,8 +17,8 @@ export class CreatePriceInput {
     @Field(() => Float)
     cost: number;
 
-    @Field(() => Int)
-    numberOfHours: number;
+    @Field(() => String)
+    duration: string;
 
     @Field(() => Int)
     vehicleTypeId: number;

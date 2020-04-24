@@ -1,4 +1,4 @@
-import { ObjectType, Field, createUnionType } from 'type-graphql';
+import { ObjectType, Field, createUnionType, Int } from 'type-graphql';
 import { User } from '../../entities/user';
 import { Role } from '../../entities/roles';
 import { VehicleType } from '../../entities/vehicleTypes';
@@ -27,6 +27,22 @@ export class ResponseError {
         this.message = message;
         this.path = path;
     }
+}
+
+// tslint:disable-next-line: max-classes-per-file
+@ObjectType()
+export class CountResponse {
+    @Field(() => Int)
+    reservationCount: number;
+
+    @Field(() => Int)
+    locationsCount: number;
+
+    @Field(() => Int)
+    membersCount: number;
+
+    @Field(() => Int)
+    vehiclesCount: number;
 }
 
 const UserResponseUnion = createUnionType({
@@ -77,6 +93,7 @@ const PriceResponseUnion = createUnionType({
     description: 'Price response type',
     types: () => [Price, ResponseError]
 });
+
 
 
 
