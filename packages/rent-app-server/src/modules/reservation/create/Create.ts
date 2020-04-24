@@ -45,7 +45,9 @@ export class CreateReservationResolver {
 
             const payment = await Payment.create({
                 user,
-                price
+                price,
+                paymentDate: new Date(),
+                totalCost: price.cost
             }).save();
 
             const reservation = await Reservation.create({

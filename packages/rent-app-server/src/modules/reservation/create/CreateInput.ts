@@ -1,4 +1,4 @@
-import { InputType, Field, Int, Float } from 'type-graphql';
+import { InputType, Field, Int } from 'type-graphql';
 import { IsDateString, IsUUID } from 'class-validator';
 /*
  * File Created: Sunday, 19th April 2020

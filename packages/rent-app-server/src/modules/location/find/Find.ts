@@ -14,7 +14,7 @@ export class FindLocationResolver {
 
     @Authorized(['admin', 'user'])
     @Query(() => LocationResponseUnion)
-    async findLocation(@Arg('id') id: number=NaN, @Arg('locationName') locationName: string) {
+    async findLocation(@Arg('id', {defaultValue: NaN}) id: number, @Arg('locationName', {defaultValue: ''}) locationName: string) {
         try {
             if (!isNaN(id)) {
                 return await Location.findOne({ id }, {relations: ['vehicles']});

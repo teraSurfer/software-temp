@@ -35,5 +35,9 @@ export class Payment extends BaseEntity {
     @Column('float', {name: 'total_cost'})
     totalCost: number;
 
+    @Field(() => String)
+    @Column('date')
+    paymentDate: Date | string;
+
 }
 

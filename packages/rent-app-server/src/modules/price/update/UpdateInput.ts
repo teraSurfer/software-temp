@@ -22,6 +22,6 @@ export class UpdatePriceInput {
     @Field(() => String)
     duration: string;
 
-    @Field(() => Int)
+    @Field(() => Int, {nullable: true})
     vehicleTypeId: number;
 }

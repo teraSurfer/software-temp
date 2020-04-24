@@ -80,7 +80,7 @@ export class RegisterResolver {
 
     expiryDate.setMonth(expiryDate.getMonth() + 6);
 
-    const price = await Price.findOne({ name: '6 month membership cost' });
+    const price = await Price.findOne({ name: 'MEMBERSHIP' });
 
 
     await MembershipDetails.create({
@@ -101,6 +101,7 @@ export class RegisterResolver {
       price,
       user,
       totalCost: price?.cost,
+      paymentDate: new Date()
     }).save();
 
     return user;
