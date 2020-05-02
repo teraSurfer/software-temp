@@ -26,7 +26,7 @@ const CreatePrice = function (props: CreatePriceProps) {
     duration: '',
     vehicleTypeId: NaN,
   });
-  const vehicleTypes = useQuery(VEHICLE_TYPES);
+  const vehicleTypes = useQuery(VEHICLE_TYPES, { variables: { take: 15 } });
 
   const [createPrice, { loading }] = useMutation(CREATE_PRICE);
 

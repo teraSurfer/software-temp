@@ -1,4 +1,4 @@
-import { InputType, Field, Float } from 'type-graphql';
+import { InputType, Field } from 'type-graphql';
 import { Length } from 'class-validator';
 /*
  * File Created: Sunday, 29th March 2020

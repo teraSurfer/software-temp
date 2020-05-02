@@ -27,9 +27,8 @@ export class CreateVehicleTypeResolver {
             });
 
             if(vehicleTypeExists) {
-                throw new ResponseError(
-                    'A similar vehicle type already exits.',
-                    'createVehicleType'
+                throw new Error(
+                    'A similar vehicle type already exits.'
                 );
             }
 

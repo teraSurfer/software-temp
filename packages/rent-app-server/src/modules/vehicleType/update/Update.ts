@@ -19,9 +19,14 @@ export class UpdateVehicleTypeResolver {
         }: UpdateVehicleTypeInput
     ) {
         try {
+            const vtExists = await VehicleType.findOne({ id, vehicleType });
 
-            const vt = VehicleType.update({ id }, { vehicleType, vehicleTypeDescription });
-            return vt;
+            if (!vtExists) {
+                throw new Error('No vehicle with that id exists');
+            }
+
+            await VehicleType.update({ id, vehicleType }, { vehicleTypeDescription });
+            return vtExists;
         } catch(err) {
             throw new ResponseError(
                 err.message,

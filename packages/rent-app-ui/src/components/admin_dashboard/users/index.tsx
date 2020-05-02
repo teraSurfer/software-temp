@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, Fragment } from 'react';
 import {
   Card,
   CardBody,
@@ -7,41 +7,47 @@ import {
   ButtonGroup,
   Button,
   Spinner,
+  Collapse,
 } from 'reactstrap';
 import { FontAwesomeIcon as Fa } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useQuery } from '@apollo/react-hooks';
 import { ALL_USERS } from '../../../queries';
 import Table from '../../util/table';
-import { useRouteMatch } from 'react-router-dom';
+import CreateUser from './CreateUser';
+import Paginate from '../util/Paginate';
+
 type UserProps = {};
 
 const Users = (props: UserProps) => {
-  const { data, loading } = useQuery(ALL_USERS);
+  const [page, setPage] = useState({
+    skip: 0,
+    take: 5,
+  });
+  const { data, loading, refetch } = useQuery(ALL_USERS, { variables: page });
 
-  const { path } = useRouteMatch();
-
+  const [isOpen, setIsOpen] = useState(false);
   let datax;
   const headers = [
     {
       Header: 'ID',
-      accessor: 'id'
+      accessor: 'id',
     },
     {
       Header: 'Email',
-      accessor: 'email'
+      accessor: 'email',
     },
     {
       Header: 'First Name',
-      accessor: 'firstName'
+      accessor: 'firstName',
     },
     {
       Header: 'Last Name',
-      accessor: 'lastName'
+      accessor: 'lastName',
     },
     {
       Header: 'Role',
-      accessor: 'roleName'
+      accessor: 'roleName',
     },
   ];
 
@@ -49,7 +55,7 @@ const Users = (props: UserProps) => {
     datax = data.findAllUsers.map((user: any) => {
       const roleName = user.roles[0].roleName.toLocaleUpperCase();
       return { ...user, roleName };
-    })
+    });
   }
 
   return (
@@ -65,19 +71,34 @@ const Users = (props: UserProps) => {
           <div className='center'></div>
           <div className='right'>
             <ButtonGroup size='sm'>
-              <Button outline color='dark'>
-                <span className='mr-1 '>New</span>
-                <Fa icon={faPlus} />
+              <Button onClick={() => setIsOpen(!isOpen)} color='dark'>
+                {isOpen ? (
+                  <Fragment>
+                    <span className='mr-1 '>Close</span>
+                    <Fa icon={faTimes} />
+                  </Fragment>
+                ) : (
+                  <Fragment>
+                    <span className='mr-1 '>New</span>
+                    <Fa icon={faPlus} />
+                  </Fragment>
+                )}
               </Button>
             </ButtonGroup>
           </div>
         </ButtonToolbar>
+        <Collapse isOpen={isOpen}>
+          <CreateUser />
+        </Collapse>
         {loading ? (
           <div className='text-center'>
             <Spinner type='grow' color='primary' />
           </div>
         ) : (
-          <Table data={datax} headers={headers} clickable path={path} />
+          <Fragment>
+              <Table data={datax} headers={headers} />
+              <Paginate data={datax} page={page} setPage={setPage} refetch={refetch} />
+          </Fragment>
         )}
       </CardBody>
     </Card>

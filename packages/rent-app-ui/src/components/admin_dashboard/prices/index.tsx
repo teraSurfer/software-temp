@@ -10,15 +10,14 @@ import {
   Collapse,
 } from 'reactstrap';
 import { FontAwesomeIcon as Fa } from '@fortawesome/react-fontawesome';
-import { faPlus, faTimes, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useQuery } from '@apollo/react-hooks';
 import { ALL_PRICES } from '../../../queries';
 import Table from '../../util/table';
 import CreatePrice from './createPrice';
 import { useRouteMatch } from 'react-router-dom';
-import swal from 'sweetalert';
-import * as _ from 'lodash';
 import Price from './Price';
+import Paginate from '../util/Paginate';
 
 /*
  * File Created: Thursday, 16th April 2020
@@ -44,7 +43,7 @@ const Prices = (props: UserProps) => {
 
   const { path } = useRouteMatch();
 
-  let datax;
+  let datax = [];
   const headers = [
     {
       Header: 'ID',
@@ -67,26 +66,6 @@ const Prices = (props: UserProps) => {
       accessor: 'vehicleType',
     },
   ];
-
-  const fetchPrev = (e: any) => {
-    e.preventDefault();
-    if (_.isEqual(fetchVars, { skip: 0, take: 5 })) {
-      swal({ icon: 'warning', text: 'Already on first page.' });
-    } else {
-      setFetchVars({ skip: fetchVars.skip - 5, take: fetchVars.take - 5 });
-      refetch(fetchVars);
-    }
-  }
-
-  const fetchNext = (e: any) => {
-    e.preventDefault();
-    if (data.findAllPrices.length === 0) {
-      swal({ icon: 'warning', text: 'Already on last page.' });
-    } else {
-      setFetchVars({ skip: fetchVars.skip + 5, take: fetchVars.take + 5 });
-      refetch(fetchVars);
-    }
-  }
 
   if (!loading) {
     datax = data.findAllPrices.map((p: any) => {
@@ -136,12 +115,7 @@ const Prices = (props: UserProps) => {
         ) : (
           <Table data={datax} headers={headers} clickable path={path} />
         )}
-        <ButtonToolbar className='d-flex mt-2 justify-content-center'>
-          <ButtonGroup>
-            <Button outline onClick={fetchPrev} color='dark' size='sm'><Fa icon={faChevronLeft} /></Button>
-            <Button outline onClick={fetchNext} color='dark' size='sm'><Fa icon={faChevronRight} /></Button>
-          </ButtonGroup>
-        </ButtonToolbar>
+        <Paginate data={datax} page={fetchVars} setPage={setFetchVars} refetch={refetch} />
       </CardBody>
     </Card>
   );

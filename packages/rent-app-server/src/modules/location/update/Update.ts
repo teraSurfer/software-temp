@@ -25,24 +25,23 @@ export class UpdateLocationResolver {
         vehicleCapacity
     }: UpdateLocationInput) {
         try {
-            const locationExists = await Location.findOne({ id }, {relations: ['vehicles']});
+            const locationExists = await Location.findOne({ id });
 
-            if (!!locationExists) {
+            if (!locationExists) {
                 throw new ResponseError('No location with that id exists', 'updateLocation');
             }
 
-            const vehicles = locationExists!.vehicles;
-
-            return await Location.update({ id }, {
+            await Location.update({ id }, {
                 id,
                 locationName,
                 addressFirstLine,
                 addressSecondLine,
                 addressThirdLine,
                 addressZipCode,
-                vehicleCapacity,
-                vehicles: [...vehicles]
+                vehicleCapacity
             });
+
+            return locationExists;
         } catch (err) {
             throw new ResponseError(err.message, 'updateLocation');
         }

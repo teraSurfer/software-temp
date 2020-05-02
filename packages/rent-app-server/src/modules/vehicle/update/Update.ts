@@ -1,5 +1,5 @@
 import { Resolver, Mutation, Authorized, Arg } from 'type-graphql';
-import { VehicleResponseUnion, ResponseError } from '../../shared';
+import { VehicleResponseUnion } from '../../shared';
 import { UpdateVehicleInput } from './UpdateInput';
 import { Vehicle } from '../../../entities/vehicle';
 import { Location } from '../../../entities/location';
@@ -33,20 +33,24 @@ export class UpdateVehicleResolver {
             const vehicleExists = await Vehicle.findOne({ id });
 
             if (!vehicleExists) {
-                throw new ResponseError('A vechicle with given id does not exist', 'updateVehicle');
+                throw new Error('A vechicle with given id does not exist');
             }
             let l: Location | undefined;
             if (location !== '') {
                 l = await Location.findOne({
                     locationName: location
-                });
+                }, { relations: ['vehicles'] });
+                
+                if (l?.vehicles === l?.vehicleCapacity) {
+                    throw new Error('Vehicle capacity full at location.');
+                }
             }
 
             const vt = await VehicleType.findOne({ vehicleType });
 
             const ls = new Date(lastServiced);
 
-            return await Vehicle.update({ id }, {
+            await Vehicle.update({ id }, {
                 make,
                 model,
                 location: l,
@@ -57,8 +61,10 @@ export class UpdateVehicleResolver {
                 vehicleType: vt,
                 year
             });
+
+            return vehicleExists;
         } catch (err) {
-            throw new ResponseError(err.message, 'updateVehicle');
+            throw new Error(err.message);
         }
     }
 }

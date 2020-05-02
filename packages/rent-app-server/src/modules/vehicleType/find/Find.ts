@@ -33,12 +33,13 @@ export class FindVehicleTypeResolver {
     }
 
     @Authorized(['admin', 'user'])
-    @Query(() => [VehicleTypeResponseUnion]!)
-    async findOneVehicleType(@Arg('id') id: number=NaN, @Arg('vehicleType') vehicleType: string='') {
+    @Query(() => VehicleTypeResponseUnion!)
+    async findOneVehicleType(@Arg('id', {nullable: true}) id: number, @Arg('vehicleType', {nullable: true}) vehicleType: string) {
         try {
-            if (!isNaN(id)) {
+            if (id !== null) {
+                console.log('h>');
                 return await VehicleType.findOne({id});
-            } else if (vehicleType !== '') {
+            } else if (vehicleType !== null) {
                 return await VehicleType.findOne({ vehicleType });
             } else {
                 throw new ResponseError(

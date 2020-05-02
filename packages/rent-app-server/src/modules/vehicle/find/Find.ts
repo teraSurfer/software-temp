@@ -14,7 +14,7 @@ export class FindVehicleResolver {
 
     @Authorized(['admin', 'user'])
     @Query(() => VehicleResponseUnion)
-    async findVehicle(@Arg('id') id: string, @Arg('registrationTag') registrationTag: string) {
+    async findVehicle(@Arg('id', {defaultValue: ''}) id: string, @Arg('registrationTag', {defaultValue: ''}) registrationTag: string) {
         try {
             if (id !== '') {
                 return await Vehicle.findOne({ id }, { relations: ['vehicleType', 'location'] });
@@ -33,7 +33,6 @@ export class FindVehicleResolver {
     async findAllVehicles(@Arg('skip', {defaultValue: 0}) skip: number, @Arg('take', {defaultValue: 10}) take: number) {
         try {
             return await Vehicle.find({
-                relations: ['vehicleType', 'location'],
                 order: {
                     registrationTag: 'ASC'
                 },

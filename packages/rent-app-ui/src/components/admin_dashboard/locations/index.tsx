@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, Fragment } from 'react';
 import {
   Card,
   CardBody,
@@ -7,21 +7,35 @@ import {
   ButtonGroup,
   Button,
   Spinner,
+  Collapse,
 } from 'reactstrap';
 import { FontAwesomeIcon as Fa } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useQuery } from '@apollo/react-hooks';
 import { ALL_LOCATIONS } from '../../../queries';
 import Table from '../../util/table';
+import Location from './Location';
+import { useRouteMatch } from 'react-router-dom';
+import CreateLocation from './CreateLocation';
+import Paginate from '../util/Paginate';
+
 type UserProps = {};
 
 const Locations = (props: UserProps) => {
-  const { data, loading } = useQuery(ALL_LOCATIONS, {
+  const [page, setPage] = useState({
+    take: 5,
+    skip: 0,
+  });
+
+  const { data, loading, refetch } = useQuery(ALL_LOCATIONS, {
     variables: {
-      take: 10,
-      skip: 0,
+      ...page,
     },
   });
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const { path } = useRouteMatch();
 
   let datax;
   const headers = [
@@ -56,7 +70,7 @@ const Locations = (props: UserProps) => {
   ];
 
   if (!loading) {
-      datax = data.findAllLocations;
+    datax = data.findAllLocations;
   }
 
   return (
@@ -72,19 +86,39 @@ const Locations = (props: UserProps) => {
           <div className='center'></div>
           <div className='right'>
             <ButtonGroup size='sm'>
-              <Button outline color='dark'>
-                <span className='mr-1 '>New</span>
-                <Fa icon={faPlus} />
+              <Button onClick={() => setIsOpen(!isOpen)} color='dark'>
+                {isOpen ? (
+                  <Fragment>
+                    <span className='mr-1'>Close</span>
+                    <Fa icon={faTimes} />
+                  </Fragment>
+                ) : (
+                  <Fragment>
+                    <span className='mr-1 '>New</span>
+                    <Fa icon={faPlus} />
+                  </Fragment>
+                )}
               </Button>
             </ButtonGroup>
           </div>
         </ButtonToolbar>
+        <Collapse isOpen={isOpen}>
+          <CreateLocation />
+        </Collapse>
         {loading ? (
           <div className='text-center'>
             <Spinner type='grow' color='primary' />
           </div>
         ) : (
-          <Table data={datax} headers={headers} />
+          <Fragment>
+            <Table data={datax} headers={headers} clickable path={path} />
+            <Paginate
+              data={datax}
+              page={page}
+              setPage={setPage}
+              refetch={refetch}
+            />
+          </Fragment>
         )}
       </CardBody>
     </Card>
@@ -92,3 +126,5 @@ const Locations = (props: UserProps) => {
 };
 
 export default Locations;
+
+export { Location };

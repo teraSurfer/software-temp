@@ -23,7 +23,6 @@ export class UpdateVehicleInput {
     model: string;
 
     @Field(() => Int)
-    @Length(1950, 2100)
     year: number;
 
     @Field(() => String)

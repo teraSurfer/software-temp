@@ -68,7 +68,6 @@ export class Server extends EventEmitter {
                 }
             })
         );
-
         this.apolloServer.applyMiddleware({ app: this.expressServer, cors: false });
     }
 

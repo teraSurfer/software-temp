@@ -1,5 +1,5 @@
 import { Resolver, Arg, Mutation, Authorized } from 'type-graphql';
-import { VehicleResponseUnion, ResponseError } from '../../shared';
+import { VehicleResponseUnion } from '../../shared';
 import { CreateVehicleInput } from './CreateInput';
 import { Vehicle } from '../../../entities/vehicle';
 import { VehicleType } from '../../../entities/vehicleTypes';
@@ -31,9 +31,8 @@ export class CreateVehicleResolver {
         try {
             const vehicleExists = await Vehicle.findOne({ registrationTag });
             if (vehicleExists) {
-                throw new ResponseError(
-                    'A vehicle with that registration tag already exists',
-                    'createVehicle'
+                throw new Error(
+                    'A vehicle with that registration tag already exists'
                 );
             }
 
@@ -41,11 +40,15 @@ export class CreateVehicleResolver {
                 vehicleType
             });
             let l: Location | undefined;
-            if (location !== '')
+            if (location !== '') {
                 l = await Location.findOne({
                     locationName: location
-                });
+                }, { relations: ['vehicles'] });
 
+                if (l?.vehicles.length === l?.vehicleCapacity) {
+                    throw new Error('The location has reached maximum capacity.');
+                }
+            }
             const ls = new Date(lastServiced);
 
             const v = await Vehicle.create({
@@ -62,9 +65,8 @@ export class CreateVehicleResolver {
 
             return v;
         } catch (err) {
-            throw new ResponseError(
-                err.message,
-                'createVehicle'
+            throw new Error(
+                err.message
             );
         }
     }

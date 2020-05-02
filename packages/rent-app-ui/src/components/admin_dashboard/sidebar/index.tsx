@@ -6,8 +6,8 @@ import {
   faUser,
   faDollarSign,
   faMapMarked,
-  faCog,
   faHome,
+  faCarSide
 } from '@fortawesome/free-solid-svg-icons';
 import styles from './styles.module.scss';
 import { NavLink as RRNavLink } from 'react-router-dom';
@@ -18,8 +18,8 @@ type SidebarProps = {
 
 type navItemState = {
   icon: any;
-  text: 'Home' | 'Vehicles' | 'Locations' | 'Prices' | 'Users' | 'Settings';
-  state: 'home' | 'vehicles' | 'locations' | 'prices' | 'users' | 'settings';
+  text: 'Home' | 'Vehicles' | 'Locations' | 'Prices' | 'Users' | 'Vehicle Types';
+  state: 'home' | 'vehicles' | 'locations' | 'prices' | 'users' | 'vehicle-types';
 };
 
 const Sidebar = ({ url }: SidebarProps) => {
@@ -29,7 +29,7 @@ const Sidebar = ({ url }: SidebarProps) => {
     { icon: faMapMarked, text: 'Locations', state: 'locations' },
     { icon: faDollarSign, text: 'Prices', state: 'prices' },
     { icon: faUser, text: 'Users', state: 'users' },
-    { icon: faCog, text: 'Settings', state: 'settings' },
+    { icon: faCarSide, text: 'Vehicle Types', state: 'vehicle-types' },
   ];
 
   const navs = navItems.map((nav, index) => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment, useState } from 'react';
 import {
   Container,
   Row,
@@ -6,14 +6,12 @@ import {
   Card,
   CardBody,
   CardFooter,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
   Spinner,
 } from 'reactstrap';
 import Table from '../../util/table';
 import { useQuery } from '@apollo/react-hooks';
-import { ADMIN_COUNTS } from '../../../queries';
+import { ADMIN_COUNTS, GET_PAYMENTS, GET_RESERVATIONS } from '../../../queries';
+import Paginate from '../util/Paginate';
 
 /*
  * File Created: Wednesday, 22nd April 2020
@@ -23,51 +21,22 @@ import { ADMIN_COUNTS } from '../../../queries';
  */
 
 const AdminHome = function () {
-
+  const [rPage, setRPage] = useState({ skip: 0, take: 5 });
+  const [pPage, setPPage] = useState({ skip: 0, take: 5 });
   const { data, loading } = useQuery(ADMIN_COUNTS);
+  const payments = useQuery(GET_PAYMENTS, {variables: pPage});
+  const reservations = useQuery(GET_RESERVATIONS, {variables: rPage});
 
-  const datax = [
-    {
-      idx: 1,
-      col1: 'Hello',
-      col2: 'World!',
-    },
-    {
-      idx: 2,
-      col1: 'react-table',
-      col2: 'rocks',
-    },
-    {
-      idx: 3,
-      col1: 'whatever',
-      col2: 'you want',
-    },
-    {
-      idx: 4,
-      col1: 'whatever',
-      col2: 'you want',
-    },
-    {
-      idx: 5,
-      col1: 'whatever',
-      col2: 'you want',
-    },
-  ];
+  
 
-  const header = [
-    {
-      Header: '#',
-      accessor: 'idx',
-    },
-    {
-      Header: 'Column 1',
-      accessor: 'col1', // accessor is the "key" in the data
-    },
-    {
-      Header: 'Column 2',
-      accessor: 'col2',
-    },
-  ];
+  let p = [];
+  let r = [];
+
+  if (!payments.loading && !reservations.loading) {
+    console.log(payments);
+    p = payments.data.getPayments;
+    r = reservations.data.findAllReservation;
+  }
 
   return (
     <Container fluid>
@@ -75,9 +44,11 @@ const AdminHome = function () {
         <Col sm='12' md='6' lg='3' className='mb-2 px-2'>
           <Card className='shadow-sm border-0 text-center'>
             <CardBody>
-              { loading ? <Spinner type="grow" color="primary" /> :
+              {loading ? (
+                <Spinner type='grow' color='primary' />
+              ) : (
                 <h2 className='mb-0'>{data.getCounts.reservationCount}</h2>
-              }
+              )}
             </CardBody>
             <CardFooter className='border-0'>
               <h6 className='my-0'>Reservations</h6>
@@ -87,9 +58,11 @@ const AdminHome = function () {
         <Col sm='12' md='6' lg='3' className='mb-2 px-2'>
           <Card className='shadow-sm border-0 text-center'>
             <CardBody>
-              { loading ? <Spinner type="grow" color="primary" /> :
+              {loading ? (
+                <Spinner type='grow' color='primary' />
+              ) : (
                 <h2 className='mb-0'>{data.getCounts.locationsCount}</h2>
-              }
+              )}
             </CardBody>
             <CardFooter className='border-0'>
               <h6 className='my-0'>Locations</h6>
@@ -99,9 +72,11 @@ const AdminHome = function () {
         <Col sm='12' md='6' lg='3' className='mb-2 px-2'>
           <Card className='shadow-sm border-0 text-center'>
             <CardBody>
-              { loading ? <Spinner type="grow" color="primary" /> :
+              {loading ? (
+                <Spinner type='grow' color='primary' />
+              ) : (
                 <h2 className='mb-0'>{data.getCounts.membersCount}</h2>
-              }
+              )}
             </CardBody>
             <CardFooter className='border-0'>
               <h6 className='my-0'>Members</h6>
@@ -111,9 +86,11 @@ const AdminHome = function () {
         <Col sm='12' md='6' lg='3' className='mb-2 px-2'>
           <Card className='shadow-sm border-0 text-center'>
             <CardBody>
-              { loading ? <Spinner type="grow" color="primary" /> :
+              {loading ? (
+                <Spinner type='grow' color='primary' />
+              ) : (
                 <h2 className='mb-0'>{data.getCounts.vehiclesCount}</h2>
-              }
+              )}
             </CardBody>
             <CardFooter className='border-0'>
               <h6 className='my-0'>Vehicles</h6>
@@ -125,75 +102,73 @@ const AdminHome = function () {
       <Row className='pt-3 px-2'>
         <Card className='shadow-sm border-0 w-100 p-2'>
           <h4 className='text-center'>Reservations</h4>
-          <Table data={datax} headers={header} />
-          <Pagination className='d-flex justify-content-center' aria-label='Page navigation example'>
-            <PaginationItem>
-              <PaginationLink first href='#' />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink previous href='#' />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href='#'>1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href='#'>2</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href='#'>3</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href='#'>4</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href='#'>5</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink next href='#' />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink last href='#' />
-            </PaginationItem>
-          </Pagination>
+          {reservations.loading ? (
+            <div className='text-center'>
+              <Spinner type='grow' color='primary'></Spinner>
+              <Spinner type='grow' color='accent'></Spinner>
+              <Spinner type='grow' color='warning'></Spinner>
+            </div>
+          ) : (
+            <Fragment>
+                <Table data={r} headers={reservationHeaders} />
+                <Paginate data={r} page={rPage} setPage={setRPage} refetch={reservations.refetch} />
+            </Fragment>
+          )}
         </Card>
       </Row>
       <Row className='pt-3 px-2'>
         <Card className='shadow-sm border-0 w-100 p-2'>
           <h4 className='text-center'>Payments</h4>
-          <Table data={datax} headers={header} />
-          <Pagination className='d-flex justify-content-center' aria-label='Page navigation example'>
-            <PaginationItem>
-              <PaginationLink first href='#' />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink previous href='#' />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href='#'>1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href='#'>2</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href='#'>3</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href='#'>4</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href='#'>5</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink next href='#' />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink last href='#' />
-            </PaginationItem>
-          </Pagination>
+          {payments.loading ? (
+            <div className='text-center'>
+              <Spinner type='grow' color='primary'></Spinner>
+              <Spinner type='grow' color='accent'></Spinner>
+              <Spinner type='grow' color='warning'></Spinner>
+            </div>
+          ) : (
+            <Fragment>
+                <Table data={p} headers={paymentHeaders} />
+                <Paginate data={p} page={pPage} setPage={setPPage} refetch={payments.refetch} />
+            </Fragment>
+          )}
         </Card>
       </Row>
     </Container>
   );
 };
+
+const paymentHeaders = [
+  {
+    Header: 'ID',
+    accessor: 'id',
+  },
+  {
+    Header: 'Total Cost',
+    accessor: 'totalCost',
+  },
+  {
+    Header: 'Payment Date',
+    accessor: 'paymentDate',
+  },
+];
+
+const reservationHeaders = [
+  {
+    Header: 'ID',
+    accessor: 'id',
+  },
+  {
+    Header: 'Status',
+    accessor: 'status',
+  },
+  {
+    Header: 'Reservation Start',
+    accessor: 'reservationStart',
+  },
+  {
+    Header: 'Reservation End',
+    accessor: 'reservationEnd',
+  },
+];
 
 export default AdminHome;

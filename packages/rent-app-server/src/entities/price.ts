@@ -3,12 +3,6 @@ import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMan
 import { VehicleType } from './vehicleTypes';
 import { Payment } from './payment';
 
-/*
- * File Created: Wednesday, 1st April 2020
- * Author: Achalaesh Lanka (me@terasurfer.com)
- * -----
- * Copyright (c) 2020
- */
 
 @ObjectType() 
 @Entity()
