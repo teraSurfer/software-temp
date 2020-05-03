@@ -33,7 +33,7 @@ const AdminHome = function () {
   let r = [];
 
   if (!payments.loading && !reservations.loading) {
-    console.log(payments);
+    console.log(reservations);
     p = payments.data.getPayments;
     r = reservations.data.findAllReservation;
   }

@@ -47,7 +47,7 @@ export class Vehicle extends BaseEntity {
     @Column('varchar')
     condition: string;
 
-    @Field(() => VehicleType)
+    @Field(() => VehicleType, {nullable: true})
     @ManyToOne(() => VehicleType, vt => vt.vehicles)
     vehicleType: VehicleType;
 

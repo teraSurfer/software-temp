@@ -27,7 +27,7 @@ export class Reservation extends BaseEntity {
     @ManyToOne(() => User, u => u.reservations)
     user: User;
 
-    @Field(() => Vehicle)
+    @Field(() => Vehicle, {nullable: true})
     @ManyToOne(() => Vehicle, v => v.reservations)
     vehicle: Vehicle;
 

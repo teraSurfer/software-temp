@@ -1,4 +1,4 @@
-import { Resolver, Query, Authorized, Arg } from 'type-graphql';
+import { Resolver, Query, Authorized, Arg, Ctx } from 'type-graphql';
 import { ReservationResponseUnion, ResponseError, CountResponse } from '../../shared';
 import { Reservation } from '../../../entities/reservation';
 import { Location } from '../../../entities/location';
@@ -6,6 +6,7 @@ import { Vehicle } from '../../../entities/vehicle';
 import { MembershipDetails } from '../../../entities/membershipDetails';
 import { Payment } from '../../../entities/payment';
 import { User } from '../../../entities/user';
+import { AppContext } from '../../../types/context';
 
 /*
  * File Created: Sunday, 19th April 2020
@@ -23,7 +24,7 @@ export class FindReservationResolver {
         try {
             if (id !== '') {
                 return await Reservation.findOne({ id });
-            }else {
+            } else {
                 throw new ResponseError(
                     'Need id to find a reservation',
                     'findReservation'
@@ -40,8 +41,8 @@ export class FindReservationResolver {
     @Authorized(['admin'])
     @Query(() => [ReservationResponseUnion])
     async findAllReservation(
-        @Arg('skip', {defaultValue: 0}) skip: number = 0,
-        @Arg('take', {defaultValue: 10}) take: number = 10
+        @Arg('skip', { defaultValue: 0 }) skip: number = 0,
+        @Arg('take', { defaultValue: 10 }) take: number = 10
     ) {
         try {
             return Reservation.find({
@@ -78,7 +79,7 @@ export class FindReservationResolver {
 
     @Authorized(['admin'])
     @Query(() => [Payment])
-    async getPayments(@Arg('skip', {defaultValue: 0}) skip: number, @Arg('take', {defaultValue: 5}) take: number) {
+    async getPayments(@Arg('skip', { defaultValue: 0 }) skip: number, @Arg('take', { defaultValue: 5 }) take: number) {
         try {
             return await Payment.find({
                 order: {
@@ -94,9 +95,9 @@ export class FindReservationResolver {
 
     @Authorized(['admin', 'user'])
     @Query(() => [Payment])
-    async getPaymentsForUser(@Arg('skip', { defaultValue: 0 }) skip: number, @Arg('take', { defaultValue: 5 }) take: number, @Arg('userId') userId: string) {
+    async getPaymentsForUser(@Arg('skip', { defaultValue: 0 }) skip: number, @Arg('take', { defaultValue: 5 }) take: number, @Ctx() ctx: AppContext) {
         try {
-            const userExists = await User.findOne({ id: userId });
+            const userExists = await User.findOne({ id: ctx.req.session!.userId });
 
             if (!userExists) {
                 throw new Error('No user with that ID exists');
@@ -119,9 +120,9 @@ export class FindReservationResolver {
 
     @Authorized(['admin', 'user'])
     @Query(() => [Reservation])
-    async getReservationsForUser(@Arg('userId') userId: string, @Arg('take', { defaultValue: 5 }) take: number, @Arg('skip', {defaultValue: 0}) skip: number) {
+    async getReservationsForUser(@Arg('take', { defaultValue: 5 }) take: number, @Arg('skip', { defaultValue: 0 }) skip: number, @Ctx() ctx: AppContext) {
         try {
-            const userExists = await User.findOne({ id: userId }, { relations: ['reservations'] });
+            const userExists = await User.findOne({ id: ctx.req.session!.userId }, { relations: ['reservations'] });
             if (!userExists) {
                 throw new Error('No user with that ID exists');
             }

@@ -19,16 +19,17 @@ export class UpdateReservationResolver {
     @Mutation(() => ReservationResponseUnion)
     async cancelReservation(@Arg('reservationId') reservationId: string, @Ctx() ctx: AppContext) {
         try {
-            const reservation = await Reservation.findOne({ id: reservationId });
+            const reservation = await Reservation.findOne({ id: reservationId }, {relations: ['user']});
 
             if (!reservation || reservation.user.id !== ctx.req.session!.userId) {
                 throw new ResponseError('You do not have a reservation with that id.', 'cancelReservation');
             }
-
-            return await Reservation.update({ id: reservation?.id }, {
-                ...reservation,
+            console.log(reservation);
+            await Reservation.update({ id: reservationId }, {
                 status: 'cancelled'
             });
+
+            return reservation;
 
         } catch (err) {
             throw new ResponseError(err.message, 'cancelReservation');
@@ -46,7 +47,7 @@ export class UpdateReservationResolver {
             }
 
             if (reservationExists.vehicle.id !== vehicleId) {
-                const vehicle = await Vehicle.findOne({ id: vehicleId });
+                const vehicle = await Vehicle.findOne({ id: vehicleId }, {relations: ['vehicleType']});
 
                 return await Reservation.update({ id }, {
                     ...reservationExists,

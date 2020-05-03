@@ -159,7 +159,7 @@ const CREATE_PRICE = gql`
 
 
 const GET_PRICE = gql`
-    query GetPrice($id: Float!, $name: String) {
+    query GetPrice($id: Float, $name: String) {
         findOnePrice(id: $id, name: $name) {
             ... on Price {
                 id,
@@ -331,7 +331,7 @@ const GET_RESERVATIONS = gql`
                 id,
                 status,
                 reservationStart,
-                reservationStart
+                reservationEnd
             }
         }
     }
@@ -382,6 +382,98 @@ const UPDATE_VEHICLE_TYPE = gql`
     }
 `;
 
+const FIND_AVAILABLE_VEHICLES = gql`
+    query findAvailableVehicles($startTime: String!, $endTime: String!, $vehicleType: String, $location: String ) {
+        findAvailableVehicles(startTime: $startTime, endTime: $endTime, vehicleType: $vehicleType, location: $location) {
+            ... on Vehicle {
+                id,
+                make,
+                model,
+                year,
+                location {
+                    locationName
+                },
+                vehicleType {
+                    vehicleType
+                }
+            }
+        }
+    }
+`;
+
+const FIND_RESERVATIONS_USER = gql`
+    query getReservationsForUser($take: Float, $skip: Float) {
+        getReservationsForUser(take: $take, skip: $skip) {
+            id,
+            status,
+            vehicle {
+                make,
+                model,
+                year
+            },
+            reservationStart,
+            reservationEnd
+        }
+    }
+`;
+
+const FIND_PAYMENTS_USER = gql`
+    query getPaymentsForUser($take: Float, $skip: Float) {
+        getPaymentsForUser(take: $take, skip: $skip) {
+            id,
+            totalCost,
+            paymentDate
+        }
+    }
+`;
+
+const FIND_PRICE = gql`
+    query findPriceForVehicleType($vehicleType: String!, $duration: String!) {
+        findPriceForVehicleType(vehicleType: $vehicleType, duration: $duration) {
+            ... on Price {
+                id,
+                name,
+                cost,
+                duration
+            }
+        }
+    }
+`;
+
+
+const CREATE_RESERVATION = gql`
+    mutation createReservation($data: CreateReservationInput!) {
+        createReservation(data: $data) {
+            ... on Reservation {
+                id
+            }
+        }
+    }
+`;
+
+const CANCEL_RESERVATION = gql`
+    mutation cancelReservation($reservationId: String!) {
+        cancelReservation(reservationId: $reservationId) {
+            ... on Reservation {
+                id
+            }
+        }
+    }
+`;
+
+const FIND_RESERVATION = gql`
+    query findReservation($id: String!) {
+        findReservation(id: $id) {
+            ... on Reservation {
+                id,
+                status,
+                reservationStart,
+                reservationEnd
+            }
+        }
+    }
+`;
+
 export {
     HELLO_QUERY,
     USER_LOGIN,
@@ -413,6 +505,13 @@ export {
     GET_VEHICLE_TYPE,
     CREATE_VEHICLE_TYPE,
     UPDATE_VEHICLE_TYPE,
+    FIND_AVAILABLE_VEHICLES,
+    FIND_RESERVATIONS_USER,
+    FIND_PAYMENTS_USER,
+    FIND_PRICE,
+    CREATE_RESERVATION,
+    CANCEL_RESERVATION,
+    FIND_RESERVATION,
     typeDefs,
     resolvers,
 };

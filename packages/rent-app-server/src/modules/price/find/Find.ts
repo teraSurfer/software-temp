@@ -13,9 +13,8 @@ import { VehicleType } from '../../../entities/vehicleTypes';
 @Resolver()
 export class FindPriceResolver {
 
-    @Authorized(['user', 'admin'])
     @Query(() => PriceResponseUnion)
-    async findOnePrice(@Arg('id', { defaultValue: NaN }) id: number, @Arg('name', { defaultValue: '' }) name: string) {
+    async findOnePrice(@Arg('id', { defaultValue: NaN, nullable: true }) id: number, @Arg('name', { defaultValue: '', nullable: true }) name: string) {
         try {
             if (!isNaN(id))
                 return await Price.findOneOrFail({

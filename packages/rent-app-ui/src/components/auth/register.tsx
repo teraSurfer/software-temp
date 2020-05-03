@@ -8,8 +8,16 @@ import {
   Input,
   Label,
   Button,
+  Spinner,
 } from 'reactstrap';
 import styles from './register.module.scss';
+import DateTime from 'react-datetime';
+import moment, { Moment } from 'moment';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+import { GET_PRICE, REGISTER_USER } from '../../queries';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import swal from 'sweetalert';
 
 /*
  * File Created: Friday, 20th March 2020
@@ -18,13 +26,11 @@ import styles from './register.module.scss';
  * Copyright (c) 2020
  */
 
-
 interface IRegister {
-    toggleType: any;
+  toggleType: any;
 }
 
 export default (props: IRegister) => {
-
   const [userData, setUserData] = useState({
     email: '',
     firstName: '',
@@ -39,32 +45,76 @@ export default (props: IRegister) => {
     creditCardNumber: '',
     nameOnCard: '',
     expiry: '',
-    cvv: ''
+    cvv: '',
   });
+
+  const { data, loading } = useQuery(GET_PRICE, {
+    variables: {
+      name: 'MEMBERSHIP'
+    }
+  });
+
+  const [registerUser, registerStatus] = useMutation(REGISTER_USER);
 
   function handleChange(e: any) {
     e.preventDefault();
     setUserData({
       ...userData,
-      [e.target.id]: e.target.value
+      [e.target.id]: e.target.value,
     });
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleDate(d: string | Moment) {
+    setUserData({
+      ...userData,
+      expiry: moment(d).toISOString()
+    });
+  }
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log(userData);
+    try {
+      if (userData.password !== userData.confirmPassword) {
+        swal({ icon: 'warning', title: 'Passwords do not match.' });
+        return;
+      } else if (userData.creditCardNumber.length < 13) {
+        swal({ icon: 'warning', title: 'Invalid credit card number' });
+        return;
+      }
+      const regData = { ...userData };
+      delete regData.confirmPassword;
+      const regis = await registerUser({
+        variables: {
+          data: regData
+        }
+      });
+      
+      if (regis.data && regis.data.register) {
+        swal({ icon: 'success', text: 'registered successfully.' });
+        window.location.reload();
+      }
+    } catch (err) {
+      console.log(err);
+      swal({ icon: 'error', text: err.message.replace('GraphQL error: Unexpected error value: { message: "', '').replace('", path: "register" }', '') });
+    }
   }
 
   return (
     <Card className={styles.w + ' shadow-sm border-0 my-4'}>
       <CardHeader className='bg-primary text-light'>
-        <h5 className='mb-0'>Register</h5>
+        <h5 className='mb-0'>6 month fee - {loading ? <FontAwesomeIcon icon={faSpinner} spin /> :  '$'+data.findOnePrice.cost}</h5>
       </CardHeader>
       <CardBody>
         <Form onSubmit={handleSubmit}>
           <FormGroup>
             <Label for='email'>Email:</Label>
-            <Input id='email' onChange={handleChange} type='email' required placeholder='Email'></Input>
+            <Input
+              id='email'
+              onChange={handleChange}
+              type='email'
+              required
+              placeholder='Email'
+            ></Input>
           </FormGroup>
           <FormGroup>
             <Label for='fn'>First Name:</Label>
@@ -177,13 +227,15 @@ export default (props: IRegister) => {
           </FormGroup>
           <FormGroup>
             <Label for='expiry'>Expiry Date:</Label>
-            <Input
-              id='expiry'
-              type='text'
-              onChange={handleChange}
-              placeholder='Expiry Date'
-              required
-            ></Input>
+            <DateTime
+              inputProps={{
+                id: 'expiry',
+                placeholder: 'Expiry Date',
+                required: true,
+              }}
+              onChange={handleDate}
+              timeFormat={false}
+            />
           </FormGroup>
           <FormGroup>
             <Label for='cvv'>CVV:</Label>
@@ -196,7 +248,7 @@ export default (props: IRegister) => {
             ></Input>
           </FormGroup>
           <Button block color='dark'>
-            Register
+            {registerStatus.loading ? <Spinner /> : 'Register'}
           </Button>
           <Button onClick={props.toggleType} block outline color='dark'>
             Already have an account?

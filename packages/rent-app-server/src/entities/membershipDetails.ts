@@ -18,7 +18,7 @@ export class MembershipDetails extends BaseEntity {
     id: number;
 
     @Field()
-    @Column({unique: true, nullable: false})
+    @Column({nullable: false})
     license: string;
 
     @Field()

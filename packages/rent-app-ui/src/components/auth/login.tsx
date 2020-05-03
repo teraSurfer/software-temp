@@ -15,6 +15,7 @@ import { FontAwesomeIcon as Fa } from '@fortawesome/react-fontawesome';
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import styles from './login.module.scss';
 import { Redirect, withRouter } from 'react-router-dom';
+import swal from 'sweetalert';
 
 
 const Login = (props: any) => {
@@ -59,6 +60,7 @@ const Login = (props: any) => {
         : window.localStorage.setItem('ADMIN', 'false');
         window.location.href = '/';
     } catch (err) {
+      swal('Invalid login', 'Try again', 'error');
       window.localStorage.setItem('LOGGED_IN', 'false');
       window.localStorage.setItem('ADMIN', 'false');
     }

@@ -97,8 +97,8 @@ export default (props: IAppNavbar) => {
 
   const [logout, { loading }] = useMutation(LOGOUT);
 
-  const isAdmin = !!window.localStorage.getItem('ADMIN');
-  const isLoggedIn = !!window.localStorage.getItem('LOGGED_IN');
+  const isAdmin = window.localStorage.getItem('ADMIN') === 'true';
+  const isLoggedIn = window.localStorage.getItem('LOGGED_IN') === 'true';
 
   const location = useLocation();
 
@@ -133,7 +133,7 @@ export default (props: IAppNavbar) => {
         <Collapse isOpen={isOpen} navbar>
           {
             (isLoggedIn && isAdmin) ? <AdminNavs handleLogout={handleLogout} loading={loading} />
-              : (isLoggedIn) ? <UserNavs handleLogout={handleLogout} loading={loading} />
+              : (isLoggedIn && !isAdmin) ? <UserNavs handleLogout={handleLogout} loading={loading} />
                 : <DefaultNavs />
           }
         </Collapse>
