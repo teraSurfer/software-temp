@@ -2,7 +2,7 @@ import { Resolver, Query, Authorized, Arg } from 'type-graphql';
 import { VehicleResponseUnion, ResponseError } from '../../shared';
 import { Vehicle } from '../../../entities/vehicle';
 import { Reservation } from '../../../entities/reservation';
-import * as moment from 'moment';
+import moment = require('moment');
 /*
  * File Created: Saturday, 18th April 2020
  * Author: Achalaesh Lanka (me@terasurfer.com)

@@ -11,13 +11,14 @@ import { Price } from '../entities/price';
  */
 
 const setupDatabase = async () => {
-
-    const connectionOptions = await getConnectionOptions(process.env.NODE_ENV);
-    const connection = await createConnection({...connectionOptions, name: 'default'});
-
-    await connection.synchronize();
-
     try {
+        const connectionOptions = await getConnectionOptions(process.env.NODE_ENV);
+        console.log(connectionOptions);
+        const connection = await createConnection({ ...connectionOptions, name: 'default' });
+
+        await connection.synchronize();
+
+
         console.info('Setting up database...');
 
         const adminRole = Role.create({
@@ -55,7 +56,7 @@ const setupDatabase = async () => {
 
         const membershipPrice = Price.create({
             cost: 49.99,
-            name: 'membership',
+            name: 'MEMBERSHIP',
             duration: '6 months'
         });
 

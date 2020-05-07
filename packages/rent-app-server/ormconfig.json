@@ -1,4 +1,4 @@
-{
+[{
   "name": "development",
   "type": "postgres",
   "host": "localhost",
@@ -22,4 +22,29 @@
     "migrationsDir": "src/migration",
     "subscribersDir": "src/subscriber"
   }
-}
+},
+{
+  "name": "production",
+  "type": "postgres",
+  "host": "sw-db-1.c8vfgkycudby.us-east-1.rds.amazonaws.com",
+  "port": "5432",
+  "username": "postgres",
+  "password": "$up3r5ecr3t",
+  "database": "sw_rent_db",
+  "synchronize": false,
+  "logging": true,
+  "entities": [
+    "src/entities/**/*.ts"
+  ],
+  "migrations": [
+    "src/migration/**/*.ts"
+  ],
+  "subscribers": [
+    "src/subscriber/**/*.ts"
+  ],
+  "cli": {
+    "entitiesDir": "src/entities",
+    "migrationsDir": "src/migration",
+    "subscribersDir": "src/subscriber"
+  }
+}]

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useParams, Redirect } from 'react-router-dom';
 import moment from 'moment';
 import {
@@ -10,7 +10,7 @@ import {
   Spinner,
   Button,
 } from 'reactstrap';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation, useLazyQuery } from '@apollo/react-hooks';
 import {
   FIND_PRICE,
   FETCH_VEHICLE,
@@ -25,17 +25,39 @@ const seconds = [3600, 18000, 28800];
 
 const CreateReservation = (props: CreateReservationProps) => {
   const { vehicleId, startTime, endTime } = useParams();
+  const [price, setPrice] = useState({
+    cost: '',
+    duration: ''
+  });
   const vehicle = useQuery(FETCH_VEHICLE, {
     variables: {
       id: vehicleId,
     },
   });
-  const { loading, data, error } = useQuery(FIND_PRICE, {
-    variables: {
-      vehicleType: window.sessionStorage.getItem('vehicleType') || '',
-      duration: window.sessionStorage.getItem('duration') || '',
-    },
+  const [fetchPrice, { loading, data, error, called }] = useLazyQuery(FIND_PRICE, {
+    onCompleted: (datax: any) => setPrice({ cost: datax.findPriceForVehicleType.cost, duration: datax.findPriceForVehicleType.duration })
   });
+  
+  useEffect(() => {
+    const vt = window.sessionStorage.getItem('vehicleType');
+    const d = window.sessionStorage.getItem('duration');
+    async function fetchData(vtx: string, dx: string) {
+        try {
+          fetchPrice({
+            variables: {
+              vehicleType: vtx,
+              duration: dx
+            }
+          });
+        } catch (err) {
+          console.log(err);
+        }
+    }
+
+    if (vt && vt !== '' && d && d !== '' && !called) {
+      fetchData(vt, d);
+    }
+  })
 
   const [createReservation] = useMutation(
     CREATE_RESERVATION,
@@ -69,7 +91,6 @@ const CreateReservation = (props: CreateReservationProps) => {
         'vehicleType',
         vehicle.data.findVehicle.vehicleType.vehicleType,
       );
-      window.location.reload();
     }
   }
 
@@ -152,7 +173,7 @@ const CreateReservation = (props: CreateReservationProps) => {
                 <p>Cost: </p>
               </Col>
               <Col sm={9}>
-                <p>{`$${data.findPriceForVehicleType.cost}`}</p>
+                <p>{`$${price.cost}`}</p>
               </Col>
             </Row>
             <Row>
@@ -161,7 +182,7 @@ const CreateReservation = (props: CreateReservationProps) => {
               </Col>
               <Col sm={9}>
                 <p>
-                  {`${data.findPriceForVehicleType.duration}`} -{' '}
+                  {`${price.duration}`} -{' '}
                   <span>
                     <span className='text-danger'>*</span>Rounded to nearest
                     time frame

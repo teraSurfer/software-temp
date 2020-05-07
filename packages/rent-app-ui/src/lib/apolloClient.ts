@@ -11,7 +11,8 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
 });
 const cache = new InMemoryCache({fragmentMatcher});
 const link = new HttpLink({
-  uri: 'http://localhost:3030/graphql',
+  // uri: 'http://localhost:3030/graphql',
+  uri: 'https://api.sw.terasurfer.com/graphql',
   credentials: 'include'
 });
 

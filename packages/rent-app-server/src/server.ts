@@ -3,13 +3,13 @@ import * as constants from './util/constants';
 
 import { EventEmitter } from 'events';
 import { createDBConnection } from './util/type-orm';
-import * as session from 'express-session';
+import session = require('express-session');
 import { redis } from './util/redis';
-import * as connectRedis from 'connect-redis';
+import connectRedis = require('connect-redis');
 import { ApolloServer } from 'apollo-server-express';
 import { GraphQLSchema } from 'graphql';
-import * as Express from 'express';
-import * as cors from 'cors';
+import Express = require('express');
+import cors = require('cors');
 import { generateSchemas } from './util/schemas';
 import { AppContext } from './types/context';
 
@@ -68,6 +68,7 @@ export class Server extends EventEmitter {
                 }
             })
         );
+        
         this.apolloServer.applyMiddleware({ app: this.expressServer, cors: false });
     }
 

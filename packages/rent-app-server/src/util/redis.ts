@@ -1,4 +1,4 @@
-import * as Redis from 'ioredis';
+import Redis = require('ioredis');
 
 export const redis = 
     process.env.NODE_ENV === 'production'
